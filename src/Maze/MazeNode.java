@@ -1,3 +1,5 @@
+package Maze;
+
 import java.util.LinkedList;
 
 public class MazeNode {
