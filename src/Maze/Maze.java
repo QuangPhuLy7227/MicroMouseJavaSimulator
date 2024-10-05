@@ -90,6 +90,64 @@ public class Maze implements Iterable<MazeNode> {
         b.removeNeighbor(a);
     }
 
+    public boolean wallBetween(Point alpha, Point beta) {
+        return wallBetween(at(alpha), at(beta));
+    }
+
+    public boolean wallBetween(MazeNode vertexA, MazeNode vertexB) {
+        if (vertexA == null || vertexB == null) return false;
+        LinkedList<MazeNode> neighborsOfA = vertexA.getNeighborList();
+        for (MazeNode neighbor : neighborsOfA) {
+            if (neighbor == vertexB) {
+                // There is a path directly connecting A and B, therefore no wall
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //Removes all walls in the maze, connecting every cell to its adjacent cells.
+    public void clearWalls() {
+        for (int row = 0; row < maze.length; row++) {
+            for (int column = 0; column < maze[0].length; column++) {
+                MazeNode currentNode = maze[row][column];
+                if (!outOfBounds(row + 1)) {
+                    //Vertical neighbor
+                    addEdge(currentNode, maze[row+1][column]);
+                }
+                if (!outOfBounds(column + 1)) {
+                    //Horizontal neighbor
+                    addEdge(currentNode, maze[row][column]);
+                }
+            }
+        }
+    }
+
+    //Adds a wall between two adjacent cells by removing the edge connecting them.
+    public void addWall(MazeNode vertex_A, MazeNode vertex_B) {
+        removeEdge(vertex_A, vertex_B);
+    }
+
+    //Retrieves a list of all adjacent cells to a given cell, regardless of walls.
+    public LinkedList<MazeNode> getAdjacentCellsList(MazeNode vertex) {
+        int MAX_CELLS = 4;
+        LinkedList<MazeNode> list = new LinkedList<MazeNode>();
+
+        for (int index = 0; index < MAX_CELLS; index++) {
+            //Append all adjacent neighbors to list
+            int deviation = (index < EVEN) ? +1 : -1;
+            int dr = (index % EVEN == 0) ? deviation : 0;
+            int dc = (index % EVEN == 1) ? deviation : 0;
+            if (!outOfBounds(vertex.row + dr) && !outOfBounds(vertex.column + dc)) {
+                list.add(maze[vertex.row + dr][vertex.column + dc]);
+            }
+        }
+
+        return list;
+    }
+
+
+
     @Override
     public Iterator<MazeNode> iterator() {
         return new MazeIterator();
