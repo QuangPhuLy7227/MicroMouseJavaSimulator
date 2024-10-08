@@ -1,5 +1,6 @@
 package Maze;
 
+import Algorithms.AStar;
 import Algorithms.DFS;
 import Algorithms.Dijkstra;
 
@@ -20,6 +21,11 @@ public class PathFinder {
     public LinkedList<MazeNode> findPathUsingDFS(MazeNode startVertex, MazeNode endVertex) {
         DFS dfs = new DFS(maze);
         return dfs.findPath(startVertex, endVertex);
+    }
+
+    public LinkedList<MazeNode> findPathUsingAStar(MazeNode startVertex, MazeNode endVertex) {
+        AStar aStar = new AStar(maze);
+        return aStar.findPath(startVertex, endVertex);
     }
 
     // Optimizes a given path by averaging coordinates for smoother transitions for the mouse in diagonal directions.

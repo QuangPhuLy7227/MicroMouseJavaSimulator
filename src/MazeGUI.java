@@ -17,6 +17,8 @@ public class MazeGUI implements ActionListener, KeyListener, PopupMenuListener {
 
     /*Buttons*/
     private JButton animateButton;
+    private JButton actionButton;
+    private JButton resetButton;
     private JButton clearButton;
     private JButton mazeButton;
     private JButton nextButton;
@@ -47,6 +49,8 @@ public class MazeGUI implements ActionListener, KeyListener, PopupMenuListener {
 
         /* sets names of new buttons */
         animateButton   = new JButton( "Animate" );
+        actionButton    = new JButton("Start\\end");
+        resetButton     = new JButton("Reset");
         clearButton     = new JButton( "Clear" );
         mazeButton      = new JButton( "New Maze" );
         nextButton      = new JButton( "Next" );
@@ -57,6 +61,8 @@ public class MazeGUI implements ActionListener, KeyListener, PopupMenuListener {
         /* Activates button/comboBox to register state change */
         clearButton.addActionListener( this );
         animateButton.addActionListener( this );
+        actionButton.addActionListener(this);
+        resetButton.addActionListener(this);
         mazeButton.addActionListener( this );
         nextButton.addActionListener( this );
         periscopeButton.addActionListener( this );
@@ -66,6 +72,8 @@ public class MazeGUI implements ActionListener, KeyListener, PopupMenuListener {
 
         /* add button to panels */
         northButtonPanel.add( animateButton );
+        northButtonPanel.add( actionButton );
+        northButtonPanel.add( resetButton );
         northButtonPanel.add( Box.createHorizontalGlue() );
 //        northButtonPanel.add( portComboBox );
         northButtonPanel.add( Box.createHorizontalGlue() );
