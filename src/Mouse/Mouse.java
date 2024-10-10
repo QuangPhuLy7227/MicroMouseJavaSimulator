@@ -4,8 +4,6 @@ import Maze.Maze;
 import Maze.MazeNode;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.Stack;
 
 // Micromouse class to emulate autonomous robot behavior.
 public class Mouse {
@@ -17,16 +15,10 @@ public class Mouse {
     private int row, column;
     private Maze ref_maze, maze;
     private MouseShape mouse;
-    private Point center = new Point();
     private Point origin, start_position;
     private Orientation orientation;
-    private Stack<MazeNode> explore_stack = new Stack<MazeNode>();
     private boolean visited[][];
-
-    private int num_of_runs = 0;
-    private LinkedList<MazeNode> mousePath = new LinkedList<MazeNode>();
-    private LinkedList<MazeNode> previousPath = new LinkedList<MazeNode>();
-    private boolean done = false;
+    private FloodFillSolver mouseSolver;
 
     // Creates mouse object on GUI
     public Mouse(int row, int column, Maze ref_maze, Maze maze) {
@@ -38,71 +30,7 @@ public class Mouse {
         this.origin = new Point(x, y);
         this.start_position = new Point(x, y);
         this.visited = new boolean[maze.getDimension()][maze.getDimension()];
-        start();
-    }
-
-    public void setup() {
-        clearMazeMemory();
-        moveTo(maze.at(15, 0));
-        rotateTo(Orientation.NORTH);
-    }
-
-    public void loop() {
-        explore_stack.push(maze.at(15, 0));
-        MazeNode cell = explore_stack.pop();
-        rotateTo(cell);
-        moveTo(cell);
-//        markNeighborWalls(cell, orientation);
-    }
-
-    private void start() {
-        restart();
-    }
-
-    // Erases maze memory and restarts mouse simulation from mouse initial position.
-    public void restart() {
-
-    }
-
-    private void clearMazeMemory() {
-        if (maze.getDimension() != ref_maze.getDimension()) {
-            maze = new Maze( ref_maze.getDimension());
-        }
-        maze.clearWalls();
-        explore_stack.clear();
-        mousePath.clear();
-        previousPath.clear();
-        num_of_runs = 0;
-        done = false;
-        // Mark manhattan distance of clear maze
-        for (MazeNode cell : maze) {
-            Point center = getCloserCenter(cell);
-            cell.setDistance(Math.abs(center.x - cell.x) + Math.abs(center.y - cell.y));
-            cell.setVisited(false);
-            setVisited(cell, false);
-        }
-    }
-    
-    private Point getCloserCenter(MazeNode cell) {
-        int dimension = maze.getDimension();
-        int centerX = dimension / EVEN;
-        int centerY = dimension / EVEN;
-        
-        //Singular solution cell
-        if (dimension % EVEN == 1) {
-            center.setLocation(centerX, centerY);
-            return center;
-        }
-        
-        //Quad-cells solution
-        if (cell.x < dimension / EVEN) {
-            centerX = dimension / EVEN - 1;
-        }
-        if (cell.y < dimension / EVEN) {
-            centerY = dimension / EVEN - 1;
-        }
-        center.setLocation(centerX, centerY);
-        return center;
+        mouseSolver.start();
     }
     
     //Rotate mouse to face toward the given cell
@@ -125,15 +53,15 @@ public class Mouse {
         mouse.rotateTo(orientation);
     }
 
-    private void moveTo(MazeNode cell) {
+    public void moveTo(MazeNode cell) {
         moveTo(cell.x, cell.y);
     }
 
-    private void moveTo(Point coord) {
+    public void moveTo(Point coord) {
         moveTo(coord.x, coord.y);
     }
 
-    private void moveTo(int x, int y) {
+    public void moveTo(int x, int y) {
         move(x - column, y - row);
     }
 
@@ -142,8 +70,12 @@ public class Mouse {
         row = y += dy;
     }
 
-    private void setVisited( MazeNode cell, boolean truthValue ) {
+    public void setVisited( MazeNode cell, boolean truthValue ) {
         visited[ cell.row ][ cell.column ] = truthValue;
+    }
+
+    public boolean visited( MazeNode cell ) {
+        return visited[ cell.row ][ cell.column ];
     }
 
     // Getters and setters
@@ -169,5 +101,35 @@ public class Mouse {
 
     public Maze getMaze() {
         return maze;
+    }
+
+    public Point getStartPosition() {
+        return start_position;
+    }
+
+    public void setStartPosition(int x, int y) {
+        this.start_position.setLocation(x, y);
+    }
+
+    public void draw(Graphics g, Color color) {
+        mouse.draw(g, color);
+    }
+
+    public void setGraphicsEnvironment( Point maze_draw_point, int maze_diameter ) {
+        double UNIT = (1.0 / maze.getDimension()) * maze_diameter;
+        double unitCenterX = maze_draw_point.x + column * UNIT + (UNIT / 2.0);
+        double unitCenterY = maze_draw_point.y + row * UNIT + (UNIT / 2.0);
+        double width = UNIT * PROPORTION;
+        double height = UNIT * PROPORTION;
+        double x = unitCenterX - UNIT * PROPORTION / 2.0;
+        double y = unitCenterY - UNIT * PROPORTION / 2.0;
+
+        mouse.setDimension( (int)width, (int)height );
+        mouse.setLocation( (int)x, (int)y );
+        mouse.rotateTo( orientation );
+    }
+
+    public FloodFillSolver getMouseSolver() {
+        return mouseSolver;
     }
 }

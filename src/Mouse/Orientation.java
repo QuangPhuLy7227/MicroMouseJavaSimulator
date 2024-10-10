@@ -1,6 +1,8 @@
 package Mouse;
 
-// Enum class defines the orientation of the mouse in the maze.
+/**
+ * Enum class defining the possible orientations of the mouse.
+ */
 public enum Orientation {
     NORTH,
     EAST,
