@@ -154,7 +154,7 @@ public class MazeSerializer {
         return true;
     }
 
-    private void deserializeNode(Maze maze, MazeNode node, int codeword) {
+    public void deserializeNode(Maze maze, MazeNode node, int codeword) {
         final int downBitmask = 0x01 << 1;
         final int rightBitmask = 0x01;
         int dimension = maze.getDimension();

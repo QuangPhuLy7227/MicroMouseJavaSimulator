@@ -12,6 +12,9 @@ public class Maze implements Iterable<MazeNode> {
     private MazeNode[][] maze;
     private LinkedList<MazeNode> dijkstraPath = new LinkedList<MazeNode>();
     private LinkedList<MazeNode> dfsPath = new LinkedList<MazeNode>();
+    public MazeGenerator mazeGenerator;
+    public MazeSerializer mazeSerializer;
+    public PathFinder pathFinder;
 
     public Maze(int dimension) {
         this.dimension = dimension;
@@ -22,6 +25,9 @@ public class Maze implements Iterable<MazeNode> {
                 maze[row][column] = new MazeNode(row, column);
             }
         }
+        mazeGenerator = new MazeGenerator(this);
+        mazeSerializer = new MazeSerializer();
+        pathFinder = new PathFinder(this);
     }
 
     //Clear all data of the node except the coordination
@@ -191,6 +197,18 @@ public class Maze implements Iterable<MazeNode> {
         public void remove() {
             throw new UnsupportedOperationException();
         }
+    }
+
+    public MazeSerializer mazeSerializer() {
+        return mazeSerializer;
+    }
+
+    public MazeGenerator mazeGenerator() {
+        return mazeGenerator;
+    }
+
+    public PathFinder pathFinder() {
+        return pathFinder;
     }
 }
 
