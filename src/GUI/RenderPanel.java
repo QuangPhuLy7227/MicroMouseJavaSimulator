@@ -126,7 +126,7 @@ public class RenderPanel extends JPanel {
         if (mouse.getMouseSolver().isDone()) {
             /* draws path found by mouse and checks if path is most optimal */
             drawMousePath( g, mouse_maze, rightMazePoint, cell_unit, MOUSE_PATH_COLOR );
-            if( ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd()).size() == 0 ) ref_maze.dijkstra( ref_maze.getBegin(), ref_maze.getEnd() );
+            if( ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd()).size() == 0 ) ref_maze.pathFinder().findPathUsingDijkstra( ref_maze.getBegin(), ref_maze.getEnd() );
             drawSolutionMessage( g, center, leftMazePoint, maze_diameter );
         }
 
@@ -292,7 +292,7 @@ public class RenderPanel extends JPanel {
             message = "Most Optimal Solution Found!";
         }
         else {
-            message = "Non-optimal. Dijkstra: " + ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd()).size() + " steps. Flood Fill: " + mouse.getMousePath().size() + " steps.";
+            message = "Non-optimal. Dijkstra: " + ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd()).size() + " steps. Flood Fill: " + mouse.getMouseSolver().getMousePath().size() + " steps.";
         }
 
         double width_offset  = g.getFontMetrics().stringWidth( message ) / 2.0;
