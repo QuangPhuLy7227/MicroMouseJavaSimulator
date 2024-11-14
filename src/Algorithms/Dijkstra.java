@@ -29,21 +29,46 @@ public class Dijkstra {
         startVertex.setDistance(0);
         pq.add(new PQNode<MazeNode>(0, startVertex));
 
+//        while (!pq.isEmpty()) { //Phu
+//            PQNode<MazeNode> pqNode = pq.poll();
+//            MazeNode currentNode = pqNode.getData();
+//            int distance =currentNode.getDistance();
+//
+//            if (currentNode.visited == false){
+//                currentNode.setVisited(true);
+//                LinkedList<MazeNode> neighbor_list = currentNode.getNeighborList();
+//                for (MazeNode neighbor : neighbor_list){
+//                    int weight = 1; //since this is an unweighted graph
+//                    int cost = distance + weight;
+//                    if (cost < neighbor.getDistance()){
+//                        neighbor.setDistance(cost);
+//                        neighbor.setPrev(currentNode);
+//                        pq.add(new PQNode<>(cost, neighbor));
+//                    }
+//                }
+//            }
+//        }
+
         while (!pq.isEmpty()) {
             PQNode<MazeNode> pqNode = pq.poll();
             MazeNode currentNode = pqNode.getData();
-            int distance =currentNode.getDistance();
+            int distance = currentNode.getDistance();
 
-            if (currentNode.visited == false){
+//            System.out.printf("Visiting Node: %s with distance: %d%n", currentNode, distance); // Debug output
+
+            if (currentNode.visited == false) {
                 currentNode.setVisited(true);
-                LinkedList<MazeNode> neighbor_list = currentNode.getNeighborList();
-                for (MazeNode neighbor : neighbor_list){
-                    int weight = 1; //since this is an unweighted graph
+                LinkedList<MazeNode> neighborList = currentNode.getNeighborList();
+
+                for (MazeNode neighbor : neighborList) {
+                    int weight = 1; // Assuming uniform cost for all edges
                     int cost = distance + weight;
-                    if (cost < neighbor.getDistance()){
+
+                    if (cost < neighbor.getDistance()) {
                         neighbor.setDistance(cost);
                         neighbor.setPrev(currentNode);
                         pq.add(new PQNode<>(cost, neighbor));
+//                        System.out.printf("Updating Neighbor: %s with new cost: %d%n", neighbor, cost); // Debug output
                     }
                 }
             }

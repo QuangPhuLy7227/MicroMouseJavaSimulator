@@ -20,7 +20,24 @@ public class Mouse {
     private boolean visited[][];
     private FloodFillSolver mouseSolver;
 
-    // Creates mouse object on GUI
+    // Creates mouse object on GUI // Phu
+//    public Mouse(int row, int column, Maze ref_maze, Maze maze) {
+//        this.row = this.y = row;
+//        this.column = this.x = column;
+//        this.ref_maze = ref_maze;
+//        this.maze = maze;
+//        this.mouse = new MouseShape();
+//        this.origin = new Point(x, y);
+//        this.start_position = new Point(x, y);
+//        this.visited = new boolean[maze.getDimension()][maze.getDimension()];
+//
+//        // Initialize the mouseSolver object before starting it
+//        // Ensure Mouse, ref_maze, and maze are initialized
+//        this.mouseSolver = new FloodFillSolver(this, ref_maze, maze);
+//
+//        mouseSolver.start(); // Now it's safe to invoke start()
+//    }
+
     public Mouse(int row, int column, Maze ref_maze, Maze maze) {
         this.row = this.y = row;
         this.column = this.x = column;
@@ -30,24 +47,32 @@ public class Mouse {
         this.origin = new Point(x, y);
         this.start_position = new Point(x, y);
         this.visited = new boolean[maze.getDimension()][maze.getDimension()];
+
+        // Initialize orientation to a default value
+        this.orientation = Orientation.NORTH;
+
+        // Initialize the mouseSolver object before starting it
+        this.mouseSolver = new FloodFillSolver(this, ref_maze, maze);
+
         mouseSolver.start();
     }
-    
-    //Rotate mouse to face toward the given cell
+
+
+    // Rotate mouse to face toward the given cell
     void rotateTo(MazeNode cell) {
         if (x == cell.x) {
-            //Vertical deviation
+            // Vertical deviation
             if (y + 1 == cell.y) orientation = Orientation.SOUTH;
             else if (y - 1 == cell.y) orientation = Orientation.NORTH;
         } else if (y == cell.y) {
-            //Horizontal deviation
+            // Horizontal deviation
             if (x + 1 == cell.x) orientation = Orientation.EAST;
             else if (x - 1 == cell.x) orientation = Orientation.WEST;
         }
         rotateTo(orientation);
     }
 
-    //Rotate mouse to face the given orientation.
+    // Rotate mouse to face the given orientation
     void rotateTo(Orientation orientation) {
         this.orientation = orientation;
         mouse.rotateTo(orientation);
@@ -70,12 +95,12 @@ public class Mouse {
         row = y += dy;
     }
 
-    public void setVisited( MazeNode cell, boolean truthValue ) {
-        visited[ cell.row ][ cell.column ] = truthValue;
+    public void setVisited(MazeNode cell, boolean truthValue) {
+        visited[cell.row][cell.column] = truthValue;
     }
 
-    public boolean visited( MazeNode cell ) {
-        return visited[ cell.row ][ cell.column ];
+    public boolean visited(MazeNode cell) {
+        return visited[cell.row][cell.column];
     }
 
     // Getters and setters
@@ -115,7 +140,7 @@ public class Mouse {
         mouse.draw(g, color);
     }
 
-    public void setGraphicsEnvironment( Point maze_draw_point, int maze_diameter ) {
+    public void setGraphicsEnvironment(Point maze_draw_point, int maze_diameter) {
         double UNIT = (1.0 / maze.getDimension()) * maze_diameter;
         double unitCenterX = maze_draw_point.x + column * UNIT + (UNIT / 2.0);
         double unitCenterY = maze_draw_point.y + row * UNIT + (UNIT / 2.0);
@@ -124,9 +149,9 @@ public class Mouse {
         double x = unitCenterX - UNIT * PROPORTION / 2.0;
         double y = unitCenterY - UNIT * PROPORTION / 2.0;
 
-        mouse.setDimension( (int)width, (int)height );
-        mouse.setLocation( (int)x, (int)y );
-        mouse.rotateTo( orientation );
+        mouse.setDimension((int) width, (int) height);
+        mouse.setLocation((int) x, (int) y);
+        mouse.rotateTo(orientation);
     }
 
     public FloodFillSolver getMouseSolver() {
