@@ -36,7 +36,7 @@ public class AStar_Test {
 
     @Test
     /**
-     * Test 2 - there is a valid path found using Dijstrak
+     * Test 2 - there is a valid path found using AStar
      * Path: (1) -> (2) -> (5) -> (6) -> (5) -> (7) -> (8) -> (14) -> (15) -> (16) -> (17) -> (18) -> (19)
      * -> (20) -> (17) -> (8) -> (9) -> (10) -> (11) -> (10) -> (12) -> (13) -> End (refer to the CFD)
      * Input:
