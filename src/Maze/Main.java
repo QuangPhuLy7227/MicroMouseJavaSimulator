@@ -11,9 +11,10 @@ public class Main {
         int non_tree_edges = 0;
         boolean dijkstra = false;
         boolean dfs = false;
+        boolean astar = false;
 
         // Initialize the MazeGUI object
-        gui = new MazeGUI(dimension, non_tree_edges, dijkstra, dfs);
+        gui = new MazeGUI(dimension, non_tree_edges, dijkstra, dfs, astar);
         System.out.println("Initial state: DFS=" + dfs + ", Dijkstra=" + dijkstra);
 
         // Handle algorithm selection
@@ -26,16 +27,24 @@ public class Main {
         if ("DFS".equals(selectedAlgorithm)) {
             dfs = true;
             dijkstra = false;
+            astar = false;
             System.out.println("DFS selected. Updating states...");
         } else if ("Dijkstra".equals(selectedAlgorithm)) {
             dijkstra = true;
             dfs = false;
+            astar = false;
             System.out.println("Dijkstra selected. Updating states...");
+        } else if ("AStar".equals(selectedAlgorithm)) {
+            dijkstra = false;
+            dfs = false;
+            astar = true;
+            System.out.println("AStar selected. Updating states...");
         }
 
+
         // Debug: Print the updated state after selection
-        System.out.println("Updated state after selection: DFS=" + dfs + ", Dijkstra=" + dijkstra);
-        System.out.println("GUI State: runDFS=" + gui.isRunDFS() + ", runDijkstra=" + gui.isRunDijkstra());
+        System.out.println("Updated state after selection: DFS=" + dfs + ", Dijkstra=" + dijkstra + ", AStar=" + astar);
+        System.out.println("GUI State: runDFS=" + gui.isRunDFS() + ", runDijkstra=" + gui.isRunDijkstra() + ", runAStar=" + gui.isRunAStar());
 
         // Command-line argument parsing
         for (int index = 0; index < args.length; index++) {
@@ -68,13 +77,22 @@ public class Main {
                     independent_flag = true;
                     dijkstra = true;
                     dfs = false;
+                    astar = false;
                     System.out.println("Command line selected: Dijkstra");
                     break;
                 case ParsingStrings.DFS_FLAG:
                     independent_flag = true;
                     dfs = true;
                     dijkstra = false;
+                    astar = false;
                     System.out.println("Command line selected: DFS");
+                    break;
+                case ParsingStrings.ASTAR_FLAG:
+                    independent_flag = true;
+                    dfs = false;
+                    dijkstra = false;
+                    astar = true;
+                    System.out.println("Command line selected: AStar");
                     break;
             }
 
@@ -123,10 +141,10 @@ public class Main {
         }
 
         // Debug: Final state before creating GUI
-        System.out.println("Final state before GUI initialization: DFS=" + dfs + ", Dijkstra=" + dijkstra);
+        System.out.println("Final state before GUI initialization: DFS=" + dfs + ", Dijkstra=" + dijkstra + ", AStar=" + astar);
 
         // Reinitialize with updated parameters if needed
-        gui = new MazeGUI(dimension, non_tree_edges, dijkstra, dfs);
+        gui = new MazeGUI(dimension, non_tree_edges, dijkstra, dfs, astar);
     }
 }
 

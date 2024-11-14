@@ -47,8 +47,9 @@ public class MazeGUI {
      * @param non_tree_edges  number of no tree edges in maze graph (adds multiple path solutions).
      * @param dijkstra        color the dijkstra path on the reference maze in DIJKSTRA_PATH_COLOR.
      * @param dfs             color the dfs path on the reference maze in DFS_PATH_COLOR.
+     * @param astar           color the astar path on the reference maze in ASTAR_PATH_COLOR.
      */
-    public MazeGUI(int dimension, int non_tree_edges, boolean dijkstra, boolean dfs) {
+    public MazeGUI(int dimension, int non_tree_edges, boolean dijkstra, boolean dfs, boolean astar) {
         if (dimension < 1) dimension = 1;
         ref_maze = new Maze(dimension);
         mouse_maze = new Maze(dimension);
@@ -59,6 +60,7 @@ public class MazeGUI {
         mouse = new Mouse(dimension - 1, 0, ref_maze, mouse_maze);
         runDijkstra = dijkstra;
         runDFS = dfs;
+        runAStar = astar;
 
         controller = new MazeController(this);
         begin();
