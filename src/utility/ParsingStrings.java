@@ -18,6 +18,6 @@ public class ParsingStrings {
 
     public static final String[] FLAGS = {
             HELP_FLAG_1, HELP_FLAG_2, DIM_FLAG_1, DIM_FLAG_2, NUM_PATHS_FLAG_1,
-            NUM_PATHS_FLAG_2, DIJKSTRA_FLAG, DFS_FLAG
+            NUM_PATHS_FLAG_2, DIJKSTRA_FLAG, DFS_FLAG, ASTAR_FLAG
     };
 }

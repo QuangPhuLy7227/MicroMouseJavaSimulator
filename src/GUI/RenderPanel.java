@@ -22,6 +22,7 @@ public class RenderPanel extends JPanel {
     private static final Color MOUSE_COLOR = Color.YELLOW;
     private static final Color DIJKSTRA_PATH_COLOR = Color.RED;
     private static final Color DFS_PATH_COLOR = Color.BLUE;
+    private static final Color ASTAR_PATH_COLOR = Color.ORANGE;
     private static final Color MAZE_BACKGROUND_COLOR = Color.GRAY;
     private static final Color NUMBER_COLOR = Color.DARK_GRAY;
     private static final Color MOUSE_PATH_COLOR = Color.YELLOW;
@@ -166,6 +167,16 @@ public class RenderPanel extends JPanel {
             }
         }
 
+        if (gui.isRunAStar()) {
+            LinkedList<MazeNode> astarPath = ref_maze.pathFinder().findPathUsingAStar(ref_maze.getBegin(), ref_maze.getEnd());
+            if (!astarPath.isEmpty()) {
+                drawAStarPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, ASTAR_PATH_COLOR);
+                System.out.println("Using A*.....");
+            } else {
+                System.out.println("Error running A*.....");
+            }
+        }
+
         FloodFillSolver mouseSolver = mouse.getMouseSolver();
 
         if (mouse.getMouseSolver().isDone()) {
@@ -246,6 +257,14 @@ public class RenderPanel extends JPanel {
         colorPath(g, path, color, mazePoint, cell_unit);
     }
 
+    private void drawAStarPath(Graphics g, Maze maze, Point mazePoint, MazeNode startVertex, MazeNode endVertex, double cell_unit, Color color) {
+        LinkedList<MazeNode> path = maze.pathFinder().findPathUsingAStar(startVertex, endVertex);
+        if (path == null) {
+            System.err.println("AStar path is null.");
+            return; // Do not attempt to draw a null path
+        }
+        colorPath(g, path, color, mazePoint, cell_unit);
+    }
 
     private void drawMousePath( Graphics g, Maze maze, Point mazePoint, double cell_unit, Color color ) {
         FloodFillSolver mouseSolver = gui.getMouse().getMouseSolver();
