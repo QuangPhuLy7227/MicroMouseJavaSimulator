@@ -17,59 +17,34 @@ public class DFS {
             System.err.println("Invalid starting or ending vertex for DFS.");
             return null;
         }
-        // Initialize all nodes
+        //Initialize all nodes
         for (MazeNode node : maze) {
             node.setVisited(false);
         }
-
         LinkedList<MazeNode> path = new LinkedList<>();
-        LinkedList<MazeNode> allVisitedNodes = new LinkedList<>();
-
-        if (dfsHelper(startVertex, endVertex, path, allVisitedNodes)) {
-            // Print all visited nodes
-            System.out.print("All visited nodes: ");
-            for (MazeNode node : allVisitedNodes) {
-                System.out.print(node + " -> ");
-            }
-            System.out.println("End");
-
+        if (dfsHelper(startVertex, endVertex, path)) {
             return path;
-        } else {
+        }else {
             System.err.println("No path found from start to end vertex using DFS.");
             return null;
         }
     }
 
-    private boolean dfsHelper(MazeNode currentVertex, MazeNode endVertex, LinkedList<MazeNode> path, LinkedList<MazeNode> allVisitedNodes) {
+    private boolean dfsHelper(MazeNode currentVertex, MazeNode endVertex, LinkedList<MazeNode> path) {
         currentVertex.setVisited(true);
         path.add(currentVertex);
-        allVisitedNodes.add(currentVertex);
-
         if (currentVertex == endVertex) {
             return true;
         }
-
-        // Store the first vertex when entering the first iteration
-        MazeNode firstVertex = allVisitedNodes.getFirst();
-
-        LinkedList<MazeNode> neighborList = currentVertex.getNeighborList();
-        boolean hasUnvisitedNeighbor = false;
-
-        for (MazeNode neighbor : neighborList) {
-            if (!neighbor.getVisited()) {
-                hasUnvisitedNeighbor = true;
-                if (dfsHelper(neighbor, endVertex, path, allVisitedNodes)) {
+        LinkedList<MazeNode> neighbor_list = currentVertex.getNeighborList();
+        for (MazeNode neighbor : neighbor_list) {
+            if (!neighbor.getVisited()){
+                if (dfsHelper(neighbor, endVertex, path)) {
                     return true;
                 }
             }
         }
-
         path.removeLast();
-
-        if (!hasUnvisitedNeighbor && currentVertex == firstVertex) {
-            allVisitedNodes.add(firstVertex);
-        }
-
         return false;
     }
 }

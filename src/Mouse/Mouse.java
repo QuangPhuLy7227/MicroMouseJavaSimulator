@@ -20,7 +20,24 @@ public class Mouse {
     private boolean visited[][];
     private FloodFillSolver mouseSolver;
 
-    // Creates mouse object on GUI
+    // Creates mouse object on GUI // Phu
+//    public Mouse(int row, int column, Maze ref_maze, Maze maze) {
+//        this.row = this.y = row;
+//        this.column = this.x = column;
+//        this.ref_maze = ref_maze;
+//        this.maze = maze;
+//        this.mouse = new MouseShape();
+//        this.origin = new Point(x, y);
+//        this.start_position = new Point(x, y);
+//        this.visited = new boolean[maze.getDimension()][maze.getDimension()];
+//
+//        // Initialize the mouseSolver object before starting it
+//        // Ensure Mouse, ref_maze, and maze are initialized
+//        this.mouseSolver = new FloodFillSolver(this, ref_maze, maze);
+//
+//        mouseSolver.start(); // Now it's safe to invoke start()
+//    }
+
     public Mouse(int row, int column, Maze ref_maze, Maze maze) {
         this.row = this.y = row;
         this.column = this.x = column;
@@ -31,12 +48,15 @@ public class Mouse {
         this.start_position = new Point(x, y);
         this.visited = new boolean[maze.getDimension()][maze.getDimension()];
 
+        // Initialize orientation to a default value
+        this.orientation = Orientation.NORTH;
+
         // Initialize the mouseSolver object before starting it
-        // Ensure Mouse, ref_maze, and maze are initialized
         this.mouseSolver = new FloodFillSolver(this, ref_maze, maze);
 
-        mouseSolver.start(); // Now it's safe to invoke start()
+        mouseSolver.start();
     }
+
 
     // Rotate mouse to face toward the given cell
     void rotateTo(MazeNode cell) {

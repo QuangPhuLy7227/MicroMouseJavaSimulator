@@ -1,6 +1,10 @@
 package GUI;
 
+import Maze.Maze;
 import Mouse.FloodFillSolver;
+import Maze.PathFinder;
+import Mouse.Mouse;
+import utility.ParsingStrings;
 
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -17,6 +21,7 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
     private static final PrintStream stdoutStream = System.out;
 
     private MazeGUI gui;
+    private PathFinder pathFinder;
     public MazeController(MazeGUI gui) {
         this.gui = gui;
     }
@@ -32,6 +37,9 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
         } else if (evt.getSource() == gui.getNextButton() || evt.getSource() == gui.getAnimationCLK()) {
             handleNextButtonEvent();
         }
+//        else if (evt.getSource() == gui.getSelectAlgoButton()) {
+//            handleSelectAlgoButtonEvent();
+//        }
     }
 
     private void handleClearButtonEvent() {
@@ -66,6 +74,17 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
         gui.setOutputStats(true);
         gui.getRenderPanel().repaint();
     }
+
+//    private void handleSelectAlgoButtonEvent() {
+//        if (gui.isRunDFS()) {
+//            System.out.println("Running DFS in MazeController");
+//            pathFinder.findPathUsingDFS(gui.getRefMaze().getBegin(), gui.getEndNode());
+//        } else if (gui.isRunDijkstra()) {
+//            System.out.println("Running Dijkstra in MazeController");
+//            pathFinder.findPathUsingDijkstra(gui.getRefMaze().getBegin(), gui.getEndNode());
+//        }
+//    }
+
 
     private void handleNextButtonEvent() {
         FloodFillSolver mouseSolver = gui.getMouse().getMouseSolver();
@@ -108,3 +127,11 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
     private void handleSerialCommEvent(ActionEvent evt) {
     }
 }
+
+
+
+
+
+
+
+

@@ -35,6 +35,14 @@ public class MazeNode {
         diagonal_y = row;
     }
 
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return column;
+    }
+
     public void addNeighbor(MazeNode vertex) {
         if (vertex == null) return;
         if (x == vertex.x) {

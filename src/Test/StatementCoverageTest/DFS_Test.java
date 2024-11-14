@@ -26,7 +26,7 @@ public class DFS_Test {
     /**
      * Path 1 - startVertex is null or endVertex is null
      * Path: (3) -> (4) -> (5) -> (2) -> (6) -> End (refer to the CFD)
-     * Input: (null, (4, 4)) || ((0,0))
+     * Input: (null, (4, 4)) || ((0,0), null)
      * Expected: Invalid starting or ending vertex for DFS
      */
     public void testNullStartOrNullEnd() {
@@ -38,16 +38,14 @@ public class DFS_Test {
     /**
      * Path 2 - a path exists
      * Path: (3) -> (4) -> (7) -> (8) -> (7) -> (9) -> (10) -> (11) -> End (refer to the CFD)
-     * Input: (null, (0, 0)) || ((1,0))
+     * Input: ((0, 0)), ((1,0))
      * Expected: Path found
      */
     public void testValidPath() {
-
         start = new MazeNode(0, 0);
         end = new MazeNode(1, 0);
 
         maze.addEdge(start, end);
-
 
         LinkedList<MazeNode> result = dfs.findPath(start, end);
 
@@ -60,13 +58,12 @@ public class DFS_Test {
     /**
      * Path 3 - no path found
      * Path: (3) -> (4) -> (7) -> (8) -> (7) -> (9) -> (10) -> (12) -> End (refer to the CFD)
-     * Input: (null, (0, 0)) || ((9,0))
+     * Input: ((0, 0), (9,0))
      * Expected: No path found from start to end vertex using DFS
      */
     public void testNoPath() {
         start = new MazeNode(0, 0);
         end = new MazeNode(9, 0);
-
 
         LinkedList<MazeNode> result = dfs.findPath(start, end);
 
