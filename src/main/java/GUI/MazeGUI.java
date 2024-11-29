@@ -21,12 +21,14 @@ public class MazeGUI {
     private RenderPanel renderPanel;
 
     private JButton animateButton;
-    private JButton clearButton;
-    private JButton mazeButton;
+    private JButton saveMazeButton;
+    private JButton newMazeButton;
     private JButton nextButton;
     private JButton selectAlgoButton;
+    private JButton loadMazeButton;
 
     private JComboBox<String> algoComboBox;
+    private JComboBox<String> loadMazeComboBox;
 
     private boolean runDijkstra;
     private boolean runDFS;
@@ -86,47 +88,54 @@ public class MazeGUI {
         /* set names of new buttons */
         animateButton = new JButton("Animate");
         selectAlgoButton = new JButton("Select Algo");
-        mazeButton = new JButton("New Maze");
+        newMazeButton = new JButton("New Maze");
         nextButton = new JButton("Next");
-        clearButton = new JButton("Clear");
+        saveMazeButton = new JButton("Save");
+        loadMazeButton = new JButton("Load");
 
         /* JComboBox for algorithm selection */
-        String[] algorithms = { "DFS", "Dijkstra", "A*" };
+        String[] algorithms = { "Select an Algo", "DFS", "Dijkstra", "A*" };
         algoComboBox = new JComboBox<>(algorithms);
+        algoComboBox.setSelectedIndex(0);
         algoComboBox.setVisible(false);
-        algoComboBox.addActionListener(_ -> handleAlgorithmSelection());
+        algoComboBox.addActionListener(controller);
 
-        /* Panel to hold the JComboBox */
-        JPanel algoPanel = new JPanel();
-        algoPanel.add(algoComboBox);
+        /* JComboBox for different saved maze selection */
+        String[] loadMazes = { "Select a Maze", "Maze 1", "Maze 2", "Maze 3" };
+        loadMazeComboBox = new JComboBox<>(loadMazes);
+        loadMazeComboBox.setSelectedIndex(0);
+        loadMazeComboBox.setVisible(false);
+        loadMazeComboBox.addActionListener(_ -> handleLoadMazeSelection());
+
+        /* Panel to hold the JComboBox for algorithm */
+        JPanel algoPanel1 = new JPanel();
+        algoPanel1.add(algoComboBox);
+
+        /* Panel to hold the JComboBox for load maze */
+        JPanel algoPanel2 = new JPanel();
+        algoPanel2.add(loadMazeComboBox);
 
         /* Activates button/comboBox to register state change */
-        clearButton.addActionListener(controller);
+        saveMazeButton.addActionListener(controller);
         animateButton.addActionListener(controller);
-        mazeButton.addActionListener(_ -> handleNewMazeAction());
+        newMazeButton.addActionListener(controller);
         nextButton.addActionListener(controller);
-        selectAlgoButton.addActionListener(_ -> toggleAlgoDropdown());
+        selectAlgoButton.addActionListener(controller);
+        loadMazeButton.addActionListener(_ -> toggleLoadMazeDropDown());
 
-        /* Set layout for the northButtonPanel to center the Select Algo button */
+        /* north button panel buttons */
         northButtonPanel.add(animateButton);
-
-        // Add horizontal glue to center the Select Algo button
         northButtonPanel.add(Box.createHorizontalGlue());
-
-        // Add the Select Algo button between Animate and New Maze
         northButtonPanel.add(selectAlgoButton);
-
-        // Add more horizontal glue after the Select Algo button
         northButtonPanel.add(Box.createHorizontalGlue());
-
-        // Add the New Maze button
-        northButtonPanel.add(mazeButton);
+        northButtonPanel.add(newMazeButton);
 
         /* south button panel buttons */
         southButtonPanel.add(nextButton);
         southButtonPanel.add(Box.createHorizontalGlue());
+        southButtonPanel.add(loadMazeButton);
         southButtonPanel.add(Box.createHorizontalGlue());
-        southButtonPanel.add(clearButton);
+        southButtonPanel.add(saveMazeButton);
 
         /* background color of button panels */
         northButtonPanel.setBackground(Color.BLACK);
@@ -135,11 +144,12 @@ public class MazeGUI {
         /* set up north panel */
         northPanel.setLayout(new GridLayout(0, 1));
         northPanel.add(northButtonPanel);
-        northPanel.add(algoPanel);
+        northPanel.add(algoPanel1);
 
         /* set up south panel  */
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
         southPanel.add(southButtonPanel);
+        southPanel.add(algoPanel2);
 
         /* add panels with their buttons on the final window */
         Container contentPane = main_frame.getContentPane();
@@ -152,51 +162,40 @@ public class MazeGUI {
         animationCLK = new Timer(MazeController.ANIMATION_DELAY, controller);
     }
 
-    private void toggleAlgoDropdown() {
-        // Toggle the visibility of the JComboBox (the dropdown)
-        algoComboBox.setVisible(!algoComboBox.isVisible());
+
+    private void toggleLoadMazeDropDown() {
+        loadMazeComboBox.setVisible((!loadMazeComboBox.isVisible()));
     }
 
-    public String handleAlgorithmSelection() {
-        String selectedAlgorithm = (String) algoComboBox.getSelectedItem();
+    public void handleLoadMazeSelection() {
+        File[] savedMazeFiles = controller.getSavedMazeFiles();
+        String selectedMaze = (String) loadMazeComboBox.getSelectedItem();
 
-        runDFS = false;
-        runDijkstra = false;
-        runAStar = false;
-
-        selectAlgoButton.setText(selectedAlgorithm);
-
-        switch (Objects.requireNonNull(selectedAlgorithm)) {
-            case "DFS":
-                runDFS = true;
-                break;
-            case "Dijkstra":
-                runDijkstra = true;
-                break;
-            case "A*":
-                runAStar = true;
-                break;
+        if ("Select a Maze".equals(selectedMaze)) {
+            System.out.println("No maze selected");
+            return;
         }
 
-        algoComboBox.setVisible(false);
+        if (selectedMaze != null) {
+            switch (selectedMaze) {
+                case "Maze 1":
+                    ref_maze.mazeSerializer().loadMaze(ref_maze, savedMazeFiles[0]);
+                    System.out.println("Loading Maze 1");
+                    break;
+                case "Maze 2":
+                    ref_maze.mazeSerializer().loadMaze(ref_maze, savedMazeFiles[1]);
+                    System.out.println("Loading Maze 2");
+                    break;
+                case "Maze 3":
+                    ref_maze.mazeSerializer().loadMaze(ref_maze, savedMazeFiles[2]);
+                    System.out.println("Loading Maze 3");
+                    break;
+                default:
+                    System.out.println("Invalid selection");
+            }
+        }
 
-        return selectedAlgorithm;
-    }
-
-
-    private void handleNewMazeAction() {
-        // Regenerate the maze
-        ref_maze = new Maze(ref_maze.getDimension());
-        mouse_maze = new Maze(ref_maze.getDimension());
-        ref_maze.mazeGenerator().createRandomMaze(0, DATAFILE);
-
-        endNode = ref_maze.getEnd();
-        System.out.println("New End Node: " + endNode);
-
-        mouse = new Mouse(ref_maze.getDimension() - 1, 0, ref_maze, mouse_maze);
-
-        // Trigger any additional updates like redrawing the maze or resetting the UI if needed
-        renderPanel.repaint(); // This will force the RenderPanel to redraw the maze
+        loadMazeComboBox.setVisible(false);
     }
 
     public Maze getRefMaze() {
@@ -215,24 +214,48 @@ public class MazeGUI {
         return animateButton;
     }
 
-    public JButton getClearButton() {
-        return clearButton;
+    public JButton getLoadMazeButton() {
+        return loadMazeButton;
     }
 
-    public JButton getMazeButton() {
-        return mazeButton;
+    public JButton getSaveMazeButton() {
+        return saveMazeButton;
+    }
+
+    public JButton getLoadSaveMazeButton() {
+        return loadMazeButton;
+    }
+
+    public JButton getNewMazeButton() {
+        return newMazeButton;
+    }
+
+    public JButton getSelectAlgoButton() {
+        return selectAlgoButton;
     }
 
     public JButton getNextButton() {
         return nextButton;
     }
 
-    public boolean isRunDijkstra() {
-        return runDijkstra;
+    public void setRunDFS(boolean runDFS) {
+        this.runDFS = runDFS;
+    }
+
+    public void setRunDijkstra(boolean runDijkstra) {
+        this.runDijkstra = runDijkstra;
+    }
+
+    public void setRunAStar(boolean runAStar) {
+        this.runAStar = runAStar;
     }
 
     public boolean isRunDFS() {
         return runDFS;
+    }
+
+    public boolean isRunDijkstra() {
+        return runDijkstra;
     }
 
     public boolean isRunAStar() {
@@ -253,6 +276,34 @@ public class MazeGUI {
 
     public MazeNode getEndNode() {
         return endNode;
+    }
+
+    public JComboBox<String> getAlgoComboBox() {
+        return algoComboBox;
+    }
+
+    public JComboBox<String> getLoadMazeComboBox() {
+        return loadMazeComboBox;
+    }
+
+    public Maze getMouseMaze() {
+        return mouse_maze;
+    }
+
+    public void setRefMaze(Maze refMaze) {
+        this.ref_maze = refMaze;
+    }
+
+    public void setMouseMaze(Maze mouseMaze) {
+        this.mouse_maze = mouseMaze;
+    }
+
+    public void setEndNode(MazeNode endNode) {
+        this.endNode = endNode;
+    }
+
+    public void setMouse(Mouse mouse) {
+        this.mouse = mouse;
     }
 
 

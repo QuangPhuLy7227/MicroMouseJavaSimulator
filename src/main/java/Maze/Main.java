@@ -1,11 +1,13 @@
 package Maze;
 
+import GUI.MazeController;
 import GUI.MazeGUI;
 import utility.ParsingStrings;
 
 public class Main {
     public static void main(String[] args) {
         MazeGUI gui;
+        MazeController controller;
 
         int dimension = 18;
         int non_tree_edges = 0;
@@ -17,8 +19,10 @@ public class Main {
         gui = new MazeGUI(dimension, non_tree_edges, false, false, false);
         System.out.println("Initial state: DFS=" + false + ", Dijkstra=" + false);
 
+        controller = new MazeController(gui);
+
         // Handle algorithm selection
-        String selectedAlgorithm = gui.handleAlgorithmSelection();
+        String selectedAlgorithm = controller.handleSelectAlgoButtonEvent();
 
         // Debug: Print selected algorithm
         System.out.println("Selected algorithm: " + selectedAlgorithm);
@@ -34,7 +38,6 @@ public class Main {
             astar = true;
             System.out.println("AStar selected. Updating states...");
         }
-
 
         // Debug: Print the updated state after selection
         System.out.println("Updated state after selection: DFS=" + dfs + ", Dijkstra=" + dijkstra + ", AStar=" + astar);
@@ -141,4 +144,3 @@ public class Main {
         new MazeGUI(dimension, non_tree_edges, dijkstra, dfs, astar);
     }
 }
-

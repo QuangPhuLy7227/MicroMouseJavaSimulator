@@ -133,6 +133,7 @@ public class RenderPanel extends JPanel {
         }
 
         if (gui.isRunDijkstra()) {
+            /* draw dijkstra path on ref maze */
             LinkedList<MazeNode> dijkstraPath = ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd());
             if (!dijkstraPath.isEmpty()) {
                 drawDijkstraPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, DIJKSTRA_PATH_COLOR);
@@ -143,6 +144,7 @@ public class RenderPanel extends JPanel {
         }
 
         if (gui.isRunAStar()) {
+            /* draw a* path on ref maze */
             LinkedList<MazeNode> astarPath = ref_maze.pathFinder().findPathUsingAStar(ref_maze.getBegin(), ref_maze.getEnd());
             if (!astarPath.isEmpty()) {
                 drawAStarPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, ASTAR_PATH_COLOR);

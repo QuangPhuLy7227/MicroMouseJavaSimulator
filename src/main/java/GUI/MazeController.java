@@ -1,6 +1,9 @@
 package GUI;
 
+import Maze.Maze;
 import Mouse.FloodFillSolver;
+import Maze.MazeSerializer;
+import Mouse.Mouse;
 
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -8,33 +11,151 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.util.Objects;
 
 public class MazeController implements ActionListener, KeyListener, PopupMenuListener {
-    public static final int ANIMATION_DELAY = 250;
-
     private final MazeGUI gui;
+    private MazeSerializer mazeSerializer;
+    public static final int ANIMATION_DELAY = 250;
+    private Maze ref_maze = null;
+    private Maze mouse_maze = null;
+
+    private int saveCount = 0;
+    private static final int MAX_SAVES = 3;
+    private final File[] savedMazeFiles = {
+            new File("saveMazeFiles1.dat"),
+            new File("saveMazeFiles2.dat"),
+            new File("saveMazeFiles3.dat")
+    };
+
+    public File[] getSavedMazeFiles() {
+        return savedMazeFiles;
+    }
+
     public MazeController(MazeGUI gui) {
         this.gui = gui;
+        this.mazeSerializer = new MazeSerializer();
     }
 
     @Override
     public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == gui.getClearButton()) {
-            handleClearButtonEvent();
+        if (evt.getSource() == gui.getLoadMazeButton()) {
+            handleLoadMazeButtonEvent();
         } else if (evt.getSource() == gui.getAnimateButton()) {
             handleAnimateButtonEvent();
-        } else if (evt.getSource() == gui.getMazeButton()) {
-            handleMazeButtonEvent();
+        } else if (evt.getSource() == gui.getNewMazeButton()) {
+            handleNewMazeButtonEvent();
         } else if (evt.getSource() == gui.getNextButton() || evt.getSource() == gui.getAnimationCLK()) {
             handleNextButtonEvent();
+        } else if (evt.getSource() == gui.getSelectAlgoButton()) {
+            toggleAlgoDropDown();
+        } else if (evt.getSource() == gui.getAlgoComboBox()) {
+            handleSelectAlgoButtonEvent();
+        } else if (evt.getSource() == gui.getLoadSaveMazeButton()) {
+            toggleLoadSaveMazeDropDown();
+        } else if (evt.getSource() == gui.getLoadMazeComboBox()) {
+            handleLoadSaveMazeButtonEvent();
+        } else if (evt.getSource() == gui.getSaveMazeButton()) {
+            handleSaveMazeButtonEvent();
         }
     }
 
-    private void handleClearButtonEvent() {
+    private void handleLoadMazeButtonEvent() {
         gui.getMouse().getMouseSolver().restart();
         gui.setOutputStats(true);
         gui.getRenderPanel().repaint();
     }
+
+    private void handleNewMazeButtonEvent() {
+        // Regenerate the maze
+        gui.setRefMaze(new Maze(gui.getRefMaze().getDimension()));
+        gui.setMouseMaze(new Maze(gui.getRefMaze().getDimension()));
+        gui.getRefMaze().mazeGenerator().createRandomMaze(0, MazeGUI.DATAFILE);
+
+        gui.setEndNode(gui.getRefMaze().getEnd());
+        System.out.println("New End Node: " + gui.getEndNode());
+
+        gui.setMouse(new Mouse(gui.getRefMaze().getDimension() - 1, 0, gui.getRefMaze(), gui.getMouseMaze()));
+
+        // Trigger any additional updates like redrawing the maze or resetting the UI if needed
+        gui.getRenderPanel().repaint();
+    }
+
+    public String handleSelectAlgoButtonEvent() {
+        String selectedAlgorithm = (String) gui.getAlgoComboBox().getSelectedItem();
+        gui.setRunDFS(false);
+        gui.setRunDijkstra(false);
+        gui.setRunAStar(false);
+
+        gui.getSelectAlgoButton().setText(selectedAlgorithm);
+
+        switch (Objects.requireNonNull(selectedAlgorithm)) {
+            case "DFS":
+                gui.setRunDFS(true);
+                break;
+            case "Dijkstra":
+                gui.setRunDijkstra(true);
+                break;
+            case "A*":
+                gui.setRunAStar(true);
+                break;
+        }
+
+        gui.getAlgoComboBox().setVisible(false);
+
+        return selectedAlgorithm;
+    }
+    private void handleSelectSaveMazeButtonEvent() {
+    }
+    private void handleSaveMazeButtonEvent() {
+        if (saveCount >= MAX_SAVES) {
+            System.out.println("Maximum number of saves reached. Cannot save more mazes.");
+            return;
+        }
+
+        File fileToSave = savedMazeFiles[saveCount];
+        if (mazeSerializer != null) {
+            mazeSerializer.saveMaze(gui.getRefMaze(), fileToSave);
+            System.out.println("Maze saved to: " + fileToSave.getAbsolutePath());
+            saveCount++;
+        } else {
+            System.out.println("Maze serializer is null");
+        }
+    }
+
+    public void handleLoadSaveMazeButtonEvent() {
+        File[] savedMazeFiles = getSavedMazeFiles();
+        String selectedMaze = (String) gui.getLoadMazeComboBox().getSelectedItem();
+
+        if ("Select a Maze".equals(selectedMaze)) {
+            System.out.println("No maze selected");
+            return;
+        }
+
+        if (selectedMaze != null) {
+            switch (selectedMaze) {
+                case "Maze 1":
+                    ref_maze.mazeSerializer().loadMaze(ref_maze, savedMazeFiles[0]);
+                    System.out.println("Loading Maze 1");
+                    break;
+                case "Maze 2":
+                    ref_maze.mazeSerializer().loadMaze(ref_maze, savedMazeFiles[1]);
+                    System.out.println("Loading Maze 2");
+                    break;
+                case "Maze 3":
+                    ref_maze.mazeSerializer().loadMaze(ref_maze, savedMazeFiles[2]);
+                    System.out.println("Loading Maze 3");
+                    break;
+                default:
+                    System.out.println("Invalid selection");
+            }
+        }
+
+        gui.getLoadMazeComboBox().setVisible(false);
+        gui.getRenderPanel().repaint(); // Ensure the panel is updated with the new maze
+    }
+
 
     private void handleAnimateButtonEvent() {
         if (!gui.getAnimationCLK().isRunning()) {
@@ -52,15 +173,7 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
     }
 
     private void handleMazeButtonEvent() {
-        System.err.println("\nnew maze");
-        gui.getAnimateButton().setText("Animate");
-        if (gui.getAnimationCLK().isRunning()) gui.getAnimationCLK().stop();
-        gui.getNextButton().setEnabled(true);
-        gui.getRefMaze().clear();
-        gui.getRefMaze().mazeGenerator().createRandomMaze(MazeGUI.DATAFILE);
-        gui.getMouse().getMouseSolver().restart();
-        gui.setOutputStats(true);
-        gui.getRenderPanel().repaint();
+
     }
 
     private void handleNextButtonEvent() {
@@ -76,6 +189,14 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
             gui.getAnimateButton().setEnabled(true);
             gui.getNextButton().setEnabled(true);
         }
+    }
+
+    private void toggleAlgoDropDown() {
+        gui.getAlgoComboBox().setVisible(!gui.getAlgoComboBox().isVisible());
+    }
+
+    private void toggleLoadSaveMazeDropDown() {
+        gui.getLoadMazeComboBox().setVisible(!gui.getLoadMazeComboBox().isVisible());
     }
 
     @Override
