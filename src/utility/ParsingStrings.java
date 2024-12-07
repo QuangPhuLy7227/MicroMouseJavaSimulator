@@ -10,6 +10,7 @@ public class ParsingStrings {
     public static final String NUM_PATHS_FLAG_2 = "-nte";
     public static final String DIJKSTRA_FLAG = "-dijkstra";
     public static final String DFS_FLAG = "-dfs";
+    public static final String ASTAR_FLAG = "-astar";
     public static final String HELP_MSG = "\n-help | -h\t\tHelp message\n" +
             "-dimension | -d\t\tDimension size of maze generated\n-non_tree_edges | -nte\t" +
             "Total number of non-tree edges in maze.\n-dijkstra\t\tDijkstra's " +
@@ -17,6 +18,6 @@ public class ParsingStrings {
 
     public static final String[] FLAGS = {
             HELP_FLAG_1, HELP_FLAG_2, DIM_FLAG_1, DIM_FLAG_2, NUM_PATHS_FLAG_1,
-            NUM_PATHS_FLAG_2, DIJKSTRA_FLAG, DFS_FLAG
+            NUM_PATHS_FLAG_2, DIJKSTRA_FLAG, DFS_FLAG, ASTAR_FLAG
     };
 }

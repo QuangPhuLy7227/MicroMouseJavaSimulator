@@ -40,9 +40,10 @@ public class AStar {
                 currentNode.setVisited(true);
                 LinkedList<MazeNode> neighbor_list = currentNode.getNeighborList();
                 for (MazeNode neighbor : neighbor_list){
+                    int weight = 1; //since this is an unweighted graph
                     int difference = (int) round(sqrt(pow(endVertex.x - currentNode.x,2)
-                            + pow(endVertex.y - currentNode.y,2))); //since this is an unweighted graph
-                    int cost = distance + difference;
+                            + pow(endVertex.y - currentNode.y,2))); //  get distance from current to last
+                    int cost = distance + weight + difference;
                     if (cost < neighbor.getDistance()){
                         neighbor.setDistance(cost);
                         neighbor.setPrev(currentNode);

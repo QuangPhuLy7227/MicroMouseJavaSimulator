@@ -21,12 +21,21 @@ public class FloodFillSolver {
     private boolean done = false;
     private int numOfRuns = 0;
 
+//    public FloodFillSolver(Mouse mouse, Maze maze, Maze refMaze) {
+//        this.mouse = mouse;
+//        this.maze = maze;
+//        this.refMaze = refMaze;
+//        exploreStack.push(maze.at(mouse.getRow(), mouse.getColumn()));
+//    }
+
     public FloodFillSolver(Mouse mouse, Maze maze, Maze refMaze) {
         this.mouse = mouse;
         this.maze = maze;
         this.refMaze = refMaze;
+        this.orientation = Orientation.NORTH; // Assign a default orientation
         exploreStack.push(maze.at(mouse.getRow(), mouse.getColumn()));
     }
+
 
     public void setup() {
         clearMazeMemory();
@@ -49,40 +58,41 @@ public class FloodFillSolver {
      */
     public boolean exploreNextCell() {
         if (exploreStack.isEmpty()) {
-            // mouse is at target
+            // Target reached
             done = true;
             trackSteps();
-            // An optimal path was discovered
             if (mousePath.size() == previousPath.size() && isCompletePath(mousePath)) return false;
-            // otherwise continue traversing maze
             done = false;
             retreat();
             setPreviousPath(mousePath);
             return false;
         }
-        MazeNode cell = exploreStack.pop();
-        // sensor surroundings
-        mouse.rotateTo(cell);
-        mouse.moveTo(cell);
-        mouse.setVisited(cell, true);
-        markNeighborWalls(cell, orientation);
-        // notify other cells of new walls
-        calibrateDistance(cell);
-        for (MazeNode openNeighbor : cell.getNeighborList()) {
-            // choose the best adjacent open cell
-            if (openNeighbor.distance == cell.distance - 1) {
-                // heuristic to move closer to the target
-                exploreStack.push(openNeighbor);
-                if( openNeighbor.distance == 0 ) exploreStack.push( openNeighbor );
-                return true;
-            } else if (openNeighbor.distance == 0 && mouse.visited(openNeighbor) == false) {
-                // visit all target nodes in quad-cell solution
-                exploreStack.push(openNeighbor);
-                return true;
+
+        MazeNode currentCell = exploreStack.pop();
+        mouse.rotateTo(currentCell);
+        mouse.moveTo(currentCell);
+        mouse.setVisited(currentCell, true);
+        markNeighborWalls(currentCell, orientation);
+
+        calibrateDistance(currentCell);
+
+        // Find the next cell to move to
+        MazeNode nextCell = null;
+        for (MazeNode neighbor : currentCell.getNeighborList()) {
+            if (!mouse.visited(neighbor) && neighbor.distance == currentCell.distance - 1) {
+                nextCell = neighbor;
+                break;
             }
         }
-        return true;
+
+        if (nextCell != null) {
+            exploreStack.push(nextCell);
+            return true;
+        }
+
+        return false;
     }
+
 
     /**
      * Floods current cell such that there exist an "open" neighbor with a
@@ -90,22 +100,57 @@ public class FloodFillSolver {
      * @param cell a cell in need of distance validation.
      * @return Nothing.
      */
+//    private void calibrate(MazeNode cell) {
+//        int minDistance = Integer.MAX_VALUE;
+//        for (MazeNode openNeighbor : cell.getNeighborList()) {
+//            // Validate cell's need for calibration
+//            if (openNeighbor.distance == cell.distance - 1) return;
+//            if (openNeighbor.distance < minDistance) minDistance = openNeighbor.distance;
+//        }
+//
+//        //Update non target cell to a higher elevation
+//        if (cell.distance != 0) cell.distance = minDistance;
+//        for (MazeNode globalNeighbor : maze.getAdjacentCellsList(cell)) {
+//            //calibrate all global neighbors except for the target cells
+//            if (globalNeighbor.distance == 0) continue;
+//            calibrate(globalNeighbor);
+//        }
+//    }
+
     private void calibrate(MazeNode cell) {
-        int minDistance = Integer.MAX_VALUE;
-        for (MazeNode openNeighbor : cell.getNeighborList()) {
-            // Validate cell's need for calibration
-            if (openNeighbor.distance == cell.distance - 1) return;
-            if (openNeighbor.distance < minDistance) minDistance = openNeighbor.distance;
+        // Base case: If the cell has already been visited, return immediately
+        if (cell.getVisited()) {
+            return;
         }
 
-        //Update non target cell to a higher elevation
-        if (cell.distance != 0) cell.distance = minDistance;
+        // Mark the cell as visited to avoid recalibrating it
+        cell.setVisited(true);
+
+        int minDistance = Integer.MAX_VALUE;
+        for (MazeNode openNeighbor : cell.getNeighborList()) {
+            if (openNeighbor.distance == cell.distance - 1) {
+                // If a valid neighbor with the correct distance is found, stop further calibration
+                return;
+            }
+            if (openNeighbor.distance < minDistance) {
+                minDistance = openNeighbor.distance;
+            }
+        }
+
+        // Update the distance only if the cell is not the target
+        if (cell.distance != 0) {
+            cell.distance = minDistance;
+        }
+
+        // Recursively calibrate all adjacent cells, excluding target cells
         for (MazeNode globalNeighbor : maze.getAdjacentCellsList(cell)) {
-            //calibrate all global neighbors except for the target cells
-            if (globalNeighbor.distance == 0) continue;
-            calibrate(globalNeighbor);
+            if (globalNeighbor.distance == 0) {
+                continue; // Skip target cells
+            }
+            calibrate(globalNeighbor); // Recursive call
         }
     }
+
 
     /**
      * Floods the current cell and its adjacent cell distance value towards the target;
@@ -198,7 +243,27 @@ public class FloodFillSolver {
      * @param orientation mouse front face direction.\
      * @return Nothing.
      */
+//    private void markNeighborWalls(MazeNode cell, Orientation orientation) {
+//        MazeNode refCell = refMaze.at(cell.row, cell.column);
+//        MazeNode[] refNeighbors = { refCell.up, refCell.right, refCell.down, refCell.left };
+//        MazeNode[] neighbors = { cell.up, cell.right, cell.down, cell.left };
+//
+//        Orientation point = orientation.relativeLeft();
+//        while (point != orientation.relativeBack()) {
+//            /* sweep across the left wall, up wall, and right wall */
+//            if (refNeighbors[point.ordinal()] == null) {
+//                /* wall found in reference maze */
+//                maze.removeEdge(cell, neighbors[point.ordinal()]);
+//            }
+//            point = point.next();
+//        }
+//    }
+
     private void markNeighborWalls(MazeNode cell, Orientation orientation) {
+        if (orientation == null) {
+            orientation = Orientation.NORTH; // Default to NORTH
+        }
+
         MazeNode refCell = refMaze.at(cell.row, cell.column);
         MazeNode[] refNeighbors = { refCell.up, refCell.right, refCell.down, refCell.left };
         MazeNode[] neighbors = { cell.up, cell.right, cell.down, cell.left };
@@ -213,6 +278,7 @@ public class FloodFillSolver {
             point = point.next();
         }
     }
+
 
     /**
      * Used in periscope mode, this function marks the neighboring wall indicated

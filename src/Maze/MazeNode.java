@@ -35,6 +35,14 @@ public class MazeNode {
         diagonal_y = row;
     }
 
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return column;
+    }
+
     public void addNeighbor(MazeNode vertex) {
         if (vertex == null) return;
         if (x == vertex.x) {
@@ -116,10 +124,10 @@ public class MazeNode {
 
     public LinkedList<MazeNode> getNeighborList() {
         LinkedList<MazeNode> neighbor_list = new LinkedList<MazeNode>();
-        if (up != null) neighbor_list.push(up);
-        if( down != null ) neighbor_list.push( down );
-        if( left != null ) neighbor_list.push( left );
-        if( right != null ) neighbor_list.push( right );
+        if (up != null) neighbor_list.addLast(up);
+        if( down != null ) neighbor_list.addLast( down );
+        if( left != null ) neighbor_list.addLast( left );
+        if( right != null ) neighbor_list.addLast( right );
         return neighbor_list;
     }
 

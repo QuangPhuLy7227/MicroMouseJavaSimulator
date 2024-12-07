@@ -1,8 +1,8 @@
 package GUI;
 
 import Maze.Maze;
+import Maze.MazeNode;
 import Mouse.Mouse;
-import utility.ParsingStrings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,11 +27,17 @@ public class MazeGUI {
     private JButton clearButton;
     private JButton mazeButton;
     private JButton nextButton;
+    private JButton selectAlgoButton;
+
+    private JComboBox<String> algoComboBox;
+    private JPanel algoPanel;
 
     private boolean runDijkstra = false;
     private boolean runDFS = false;
+    private boolean runAStar = false;
     private boolean outputStats = true;
     private MazeController controller;
+    private MazeNode endNode;
 
     /**
      * Constructor: Creates and sets up MazeGUI
@@ -40,8 +46,9 @@ public class MazeGUI {
      * @param non_tree_edges  number of no tree edges in maze graph (adds multiple path solutions).
      * @param dijkstra        color the dijkstra path on the reference maze in DIJKSTRA_PATH_COLOR.
      * @param dfs             color the dfs path on the reference maze in DFS_PATH_COLOR.
+     * @param astar           color the astar path on the reference maze in ASTAR_PATH_COLOR.
      */
-    public MazeGUI(int dimension, int non_tree_edges, boolean dijkstra, boolean dfs) {
+    public MazeGUI(int dimension, int non_tree_edges, boolean dijkstra, boolean dfs, boolean astar) {
         if (dimension < 1) dimension = 1;
         ref_maze = new Maze(dimension);
         mouse_maze = new Maze(dimension);
@@ -52,17 +59,21 @@ public class MazeGUI {
         mouse = new Mouse(dimension - 1, 0, ref_maze, mouse_maze);
         runDijkstra = dijkstra;
         runDFS = dfs;
+        runAStar = astar;
 
         controller = new MazeController(this);
         begin();
+
+        endNode = ref_maze.getEnd();
+        System.out.println(endNode);
     }
 
     private void begin() {
         JFrame main_frame = new JFrame("MicroMouse Simulator");
-        main_frame.setSize( 800, 800 );
-        main_frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        main_frame.setBackground( Color.BLACK );
-        main_frame.setResizable( true );
+        main_frame.setSize(800, 800);
+        main_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        main_frame.setBackground(Color.BLACK);
+        main_frame.setResizable(true);
 
         /* main sections of layout, north, south, center */
         northPanel = new JPanel();
@@ -76,23 +87,45 @@ public class MazeGUI {
         northButtonPanel.setLayout(new BoxLayout(northButtonPanel, BoxLayout.LINE_AXIS));
         southButtonPanel.setLayout(new BoxLayout(southButtonPanel, BoxLayout.LINE_AXIS));
 
-        /* sets names of new buttons */
+        /* set names of new buttons */
         animateButton = new JButton("Animate");
-        clearButton = new JButton("Clear");
+        selectAlgoButton = new JButton("Select Algo");
         mazeButton = new JButton("New Maze");
         nextButton = new JButton("Next");
+        clearButton = new JButton("Clear");
+
+        /* JComboBox for algorithm selection */
+        String[] algorithms = { "DFS", "Dijkstra", "A*" };
+        algoComboBox = new JComboBox<>(algorithms);
+        algoComboBox.setVisible(false);
+        algoComboBox.addActionListener(e -> handleAlgorithmSelection());
+
+        /* Panel to hold the JComboBox */
+        algoPanel = new JPanel();
+        algoPanel.add(algoComboBox);
 
         /* Activates button/comboBox to register state change */
         clearButton.addActionListener(controller);
         animateButton.addActionListener(controller);
-        mazeButton.addActionListener(controller);
+        mazeButton.addActionListener(e -> handleNewMazeAction());
         nextButton.addActionListener(controller);
+        selectAlgoButton.addActionListener(e -> toggleAlgoDropdown());
 
-        /* add button to panels */
+        /* Set layout for the northButtonPanel to center the Select Algo button */
         northButtonPanel.add(animateButton);
+
+        // Add horizontal glue to center the Select Algo button
         northButtonPanel.add(Box.createHorizontalGlue());
+
+        // Add the Select Algo button between Animate and New Maze
+        northButtonPanel.add(selectAlgoButton);
+
+        // Add more horizontal glue after the Select Algo button
         northButtonPanel.add(Box.createHorizontalGlue());
+
+        // Add the New Maze button
         northButtonPanel.add(mazeButton);
+
         /* south button panel buttons */
         southButtonPanel.add(nextButton);
         southButtonPanel.add(Box.createHorizontalGlue());
@@ -106,6 +139,8 @@ public class MazeGUI {
         /* set up north panel */
         northPanel.setLayout(new GridLayout(0, 1));
         northPanel.add(northButtonPanel);
+        northPanel.add(algoPanel);
+
         /* set up south panel  */
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
         southPanel.add(southButtonPanel);
@@ -119,6 +154,77 @@ public class MazeGUI {
 
         main_frame.setVisible(true);
         animationCLK = new Timer(controller.ANIMATION_DELAY, controller);
+    }
+
+    private void toggleAlgoDropdown() {
+        // Toggle the visibility of the JComboBox (the dropdown)
+        algoComboBox.setVisible(!algoComboBox.isVisible());
+    }
+
+//    private void handleAlgorithmSelection() {
+//        String selectedAlgorithm = (String) algoComboBox.getSelectedItem();
+//
+//        switch (selectedAlgorithm) {
+//            case "DFS":
+//                runDFS = true;
+//                runDijkstra = false;
+//                runAStar = false;
+//                break;
+//            case "Dijkstra":
+//                runDFS = false;
+//                runDijkstra = true;
+//                runAStar = false;
+//                break;
+//            case "A*":
+//                runDFS = false;
+//                runDijkstra = false;
+//                runAStar = true;
+//                break;
+//        }
+//
+//        algoComboBox.setVisible(false);
+//    }
+
+    public String handleAlgorithmSelection() {
+        String selectedAlgorithm = (String) algoComboBox.getSelectedItem();
+
+        runDFS = false;
+        runDijkstra = false;
+        runAStar = false;
+
+        selectAlgoButton.setText(selectedAlgorithm);
+
+        switch (selectedAlgorithm) {
+            case "DFS":
+                runDFS = true;
+                break;
+            case "Dijkstra":
+                runDijkstra = true;
+                break;
+            case "A*":
+                runAStar = true;
+                break;
+        }
+
+        algoComboBox.setVisible(false);
+
+        return selectedAlgorithm;
+    }
+
+
+    private void handleNewMazeAction() {
+        // Regenerate the maze
+        ref_maze = new Maze(ref_maze.getDimension());
+        mouse_maze = new Maze(ref_maze.getDimension());
+        ref_maze.mazeGenerator().createRandomMaze(0, DATAFILE);
+
+        endNode = ref_maze.getEnd();
+        System.out.println("New End Node: " + endNode);
+
+        mouse = new Mouse(ref_maze.getDimension() - 1, 0, ref_maze, mouse_maze);
+
+        // Trigger any additional updates like redrawing the maze or resetting the UI if needed
+        renderPanel.repaint(); // This will force the RenderPanel to redraw the maze
     }
 
     public Maze getRefMaze() {
@@ -141,6 +247,10 @@ public class MazeGUI {
         return animateButton;
     }
 
+    public JButton getSelectAlgoButton() {
+        return selectAlgoButton;
+    }
+
     public JButton getClearButton() {
         return clearButton;
     }
@@ -161,6 +271,10 @@ public class MazeGUI {
         return runDFS;
     }
 
+    public boolean isRunAStar() {
+        return runAStar;
+    }
+
     public boolean isOutputStats() {
         return outputStats;
     }
@@ -173,98 +287,9 @@ public class MazeGUI {
         return renderPanel;
     }
 
-    public static void main(String[] args) {
-        int dimension = 16;
-        int non_tree_edges = 0;
-        boolean dijkstra = true;
-        boolean dfs = false;
-
-        for (int index = 0; index < args.length; index++) {
-            /* parse command line arguments */
-            String flag = args[index];
-            boolean independent_flag = false;
-            boolean invalidFlag = true;
-
-            for (String valid_flag : ParsingStrings.FLAGS) {
-                /* search if arg is a valid flag  */
-                if (flag.equals(valid_flag)) {
-                    invalidFlag = false;
-                    break;
-                }
-            }
-
-            if (invalidFlag) {
-                /* no such flag defined */
-                System.out.println("Unrecognized Argument: " + args[index] + "\n");
-                System.out.println(ParsingStrings.USAGE);
-                System.exit(1);
-            }
-
-            /* independent args */
-            switch (flag) {
-                case ParsingStrings.HELP_FLAG_1:
-                case ParsingStrings.HELP_FLAG_2:
-                    /* program usage */
-                    System.out.println(ParsingStrings.USAGE);
-                    System.out.println(ParsingStrings.HELP_MSG);
-                    System.exit(1);
-                    break;
-                case ParsingStrings.DIJKSTRA_FLAG:
-                    /* run dijkstra */
-                    independent_flag = true;
-                    dijkstra = true;
-                    break;
-                case ParsingStrings.DFS_FLAG:
-                    /* run dfs */
-                    independent_flag = true;
-                    dfs = true;
-                    break;
-            }
-
-            if (independent_flag) continue;
-            /* dependent args */
-            if (index + 1 == args.length) {
-                /* invalid number of args */
-                System.out.println("Flag " + args[index] + " is expecting an argument.");
-                System.out.println(ParsingStrings.USAGE);
-                System.exit(1);
-            }
-            switch (flag) {
-                case ParsingStrings.DIM_FLAG_1:
-                case ParsingStrings.DIM_FLAG_2:
-                    /* dimension input */
-                    try {
-                        dimension = Integer.parseInt(args[index + 1]);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Integer Parsing Error: dimension: " + args[index + 1] + "\n");
-                        System.exit(1);
-                    }
-                    break;
-                case ParsingStrings.NUM_PATHS_FLAG_1:
-                case ParsingStrings.NUM_PATHS_FLAG_2:
-                    /* number of cycles in graph - number of alternative solutions */
-                    try {
-                        non_tree_edges = Integer.parseInt(args[index + 1]);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Integer Parsing Error: non_tree_edges: " + args[index + 1] + "\n");
-                        System.out.println(ParsingStrings.USAGE);
-                        System.exit(1);
-                    }
-                    if (non_tree_edges < 0) {
-                        System.out.println("Max Non-Tree Edges Error: argument must be positive: " + non_tree_edges + "\n");
-                        System.out.println(ParsingStrings.USAGE);
-                        System.exit(1);
-                    }
-                    break;
-            }
-            index++;
-        }
-        if (dimension <= 0) {
-            System.out.println("Dimension Argument Error: not positive\n");
-            System.out.println("Example: java MazeGUI -dimension 16\n");
-            System.out.println(ParsingStrings.USAGE);
-            System.exit(1);
-        }
-        new MazeGUI(dimension, non_tree_edges, dijkstra, dfs);
+    public MazeNode getEndNode() {
+        return endNode;
     }
+
+
 }

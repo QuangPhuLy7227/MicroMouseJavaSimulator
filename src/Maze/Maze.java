@@ -12,6 +12,7 @@ public class Maze implements Iterable<MazeNode> {
     private MazeNode[][] maze;
     private LinkedList<MazeNode> dijkstraPath = new LinkedList<MazeNode>();
     private LinkedList<MazeNode> dfsPath = new LinkedList<MazeNode>();
+    private LinkedList<MazeNode> astarPath = new LinkedList<MazeNode>();
     public MazeGenerator mazeGenerator;
     public MazeSerializer mazeSerializer;
     public PathFinder pathFinder;
