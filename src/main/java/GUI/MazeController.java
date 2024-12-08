@@ -4,6 +4,8 @@ import Maze.Maze;
 import Mouse.FloodFillSolver;
 import Maze.MazeSerializer;
 import Mouse.Mouse;
+import Maze.MazeNode;
+import Maze.PathFinder;
 
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -12,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class MazeController implements ActionListener, KeyListener, PopupMenuListener {
@@ -102,12 +106,19 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
                 break;
         }
 
+        System.out.println("DFS: " + gui.isRunDFS());
+        System.out.println("Dijkstra: " + gui.isRunDijkstra());
+        System.out.println("A*: " + gui.isRunAStar());
+
         gui.getAlgoComboBox().setVisible(false);
 
         return selectedAlgorithm;
     }
+
+
     private void handleSelectSaveMazeButtonEvent() {
     }
+
     private void handleSaveMazeButtonEvent() {
         if (saveCount >= MAX_SAVES) {
             System.out.println("Maximum number of saves reached. Cannot save more mazes.");

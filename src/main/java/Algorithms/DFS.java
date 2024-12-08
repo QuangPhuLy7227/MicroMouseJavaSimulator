@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 public class DFS {
     private final Maze maze;
+    private LinkedList<MazeNode> dfsPath = new LinkedList<MazeNode>();
 
     public DFS(Maze maze) {
         this.maze = maze;
@@ -21,30 +22,28 @@ public class DFS {
         for (MazeNode node : maze) {
             node.setVisited(false);
         }
-        LinkedList<MazeNode> path = new LinkedList<>();
-        if (dfsHelper(startVertex, endVertex, path)) {
-            return path;
-        }else {
-            System.err.println("No path found from start to end vertex using DFS.");
-            return null;
-        }
+        dfsPath.clear();
+        dfsHelper(startVertex, endVertex);
+        return dfsPath;
     }
 
-    private boolean dfsHelper(MazeNode currentVertex, MazeNode endVertex, LinkedList<MazeNode> path) {
+    private void dfsHelper(MazeNode currentVertex, MazeNode endVertex) {
         currentVertex.setVisited(true);
-        path.add(currentVertex);
         if (currentVertex == endVertex) {
-            return true;
+            dfsPath.addFirst(currentVertex);
+            return;
         }
         LinkedList<MazeNode> neighbor_list = currentVertex.getNeighborList();
         for (MazeNode neighbor : neighbor_list) {
-            if (!neighbor.getVisited()){
-                if (dfsHelper(neighbor, endVertex, path)) {
-                    return true;
-                }
+            if( endVertex.getVisited() ) break;
+            if( neighbor.getVisited() == false ) {
+                /* visit every node exactly once */
+                dfsHelper( neighbor, endVertex );
             }
         }
-        path.removeLast();
-        return false;
+        if( endVertex.getVisited() ) {
+            /* popping from RTS stack -- save sequence of nodes */
+            dfsPath.addFirst( currentVertex );
+        }
     }
 }

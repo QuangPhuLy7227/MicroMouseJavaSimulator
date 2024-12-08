@@ -36,16 +36,22 @@ public class RenderPanel extends JPanel {
     private final Point center = new Point();
 
     private final MazeGUI gui;
+    private Maze ref_maze;
+    private Maze mouse_maze;
+    private Mouse mouse;
 
     /**
      * Constructor: Creates a JPanel for the maze GUI.
      */
     public RenderPanel(MazeGUI gui) {
         this.gui = gui;
+        ref_maze = gui.getRefMaze();
+        mouse_maze = gui.getMouseMaze();
+        mouse = gui.getMouse();
         try {
             image = ImageIO.read(new File("../src/utility/images/gannon.png"));
         } catch (IOException e) {
-            System.err.println("UCSD logo non-existent");
+            System.err.println("Gannon logo non-existent");
         }
     }
 
@@ -76,18 +82,7 @@ public class RenderPanel extends JPanel {
      */
     private void renderDefault(Graphics g) {
         center.setLocation(getWidth() / 2, getHeight() / 2);
-        Mouse mouse = gui.getMouse();
-        if (mouse == null) {
-            System.err.println("Mouse is null.");
-            return;
-        }
-
-        Maze mouse_maze = mouse.getMaze();
-        Maze ref_maze = gui.getRefMaze();
-        if (ref_maze == null || mouse_maze == null) {
-            System.err.println("Maze is null.");
-            return;
-        }
+        gui.setMouseMaze(gui.getMouse().getMaze());
 
         int maze_diameter = (int) (MazeGUI.MAZE_DEFAULT_PROPORTION * Math.min(getHeight(), getWidth()));
         int maze_radius = (int) (0.5 * maze_diameter);
@@ -108,50 +103,28 @@ public class RenderPanel extends JPanel {
         mouse.setGraphicsEnvironment(rightMazePoint, maze_diameter);
         mouse.draw(g, MOUSE_COLOR);
 
-        MazeNode endNode = gui.getEndNode();
-        if (endNode != null) {
-            int endX = (int) (leftMazePoint.x + endNode.x * cell_unit);
-            int endY = (int) (leftMazePoint.y + endNode.y * cell_unit);
-
-            // Set the color for the end node
-            g.setColor(Color.yellow);
-
-            // Draw the end node as a circle (or any other shape you prefer)
-            g.fillOval(endX - 5, endY - 5, 10, 10);
-        }
+//        MazeNode endNode = gui.getEndNode();
+//        if (endNode != null) {
+//            int endX = (int) (leftMazePoint.x + endNode.x * cell_unit);
+//            int endY = (int) (leftMazePoint.y + endNode.y * cell_unit);
+//
+//            // Set the color for the end node
+//            g.setColor(Color.yellow);
+//
+//            // Draw the end node as a circle (or any other shape you prefer)
+//            g.fillOval(endX - 5, endY - 5, 10, 10);
+//        }
 
         if (gui.isRunDFS()) {
-            /* draw dfs path on ref maze */
-            LinkedList<MazeNode> dfsPath = ref_maze.pathFinder.findPathUsingDFS(ref_maze.getBegin(), ref_maze.getEnd());
-            if (!dfsPath.isEmpty()) {
-                drawDFSPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, DFS_PATH_COLOR);
-                System.out.println("Using DFS......");
-            } else {
-                System.out.println("Error running DFS....");
-            }
-
+            drawDFSPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, DFS_PATH_COLOR);
         }
 
         if (gui.isRunDijkstra()) {
-            /* draw dijkstra path on ref maze */
-            LinkedList<MazeNode> dijkstraPath = ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd());
-            if (!dijkstraPath.isEmpty()) {
-                drawDijkstraPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, DIJKSTRA_PATH_COLOR);
-                System.out.println("Using Dijkstra.....");
-            } else {
-                System.out.println("Error running Dijkstra.....");
-            }
+            drawDijkstraPath( g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, DIJKSTRA_PATH_COLOR );
         }
 
         if (gui.isRunAStar()) {
-            /* draw a* path on ref maze */
-            LinkedList<MazeNode> astarPath = ref_maze.pathFinder().findPathUsingAStar(ref_maze.getBegin(), ref_maze.getEnd());
-            if (!astarPath.isEmpty()) {
-                drawAStarPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, ASTAR_PATH_COLOR);
-                System.out.println("Using A*.....");
-            } else {
-                System.out.println("Error running A*.....");
-            }
+            drawAStarPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, ASTAR_PATH_COLOR);
         }
 
         FloodFillSolver mouseSolver = mouse.getMouseSolver();
@@ -159,8 +132,7 @@ public class RenderPanel extends JPanel {
         if (mouse.getMouseSolver().isDone()) {
             /* draws path found by mouse and checks if path is most optimal */
             drawMousePath(g, mouse_maze, rightMazePoint, cell_unit, MOUSE_PATH_COLOR);
-            if (ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd()).isEmpty())
-                ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd());
+            if( ref_maze.getDijkstraPath().size() == 0 ) ref_maze.getPathFinder().findPathUsingDijkstra( ref_maze.getBegin(), ref_maze.getEnd() );
             drawSolutionMessage(g, center, leftMazePoint, maze_diameter);
         }
 
@@ -207,25 +179,17 @@ public class RenderPanel extends JPanel {
     }
 
     private void drawDijkstraPath(Graphics g, Maze maze, Point mazePoint, MazeNode startVertex, MazeNode endVertex, double cell_unit, Color color) {
-        LinkedList<MazeNode> path = maze.pathFinder().findPathUsingDijkstra(startVertex, endVertex);
-        if (path == null) {
-            System.err.println("Dijkstra path is null.");
-            return; // Do not attempt to draw a null path
-        }
-        colorPath(g, path, color, mazePoint, cell_unit);
+        if( maze.getDijkstraPath().size() == 0 ) maze.getPathFinder().findPathUsingDijkstra( startVertex, endVertex );
+        colorPath(g, maze.getDijkstraPath(), color, mazePoint, cell_unit);
     }
 
     private void drawDFSPath(Graphics g, Maze maze, Point mazePoint, MazeNode startVertex, MazeNode endVertex, double cell_unit, Color color) {
-        LinkedList<MazeNode> path = maze.pathFinder.findPathUsingDFS(startVertex, endVertex);
-        if (path == null) {
-            System.err.println("DFS path is null.");
-            return; // Do not attempt to draw a null path
-        }
-        colorPath(g, path, color, mazePoint, cell_unit);
+        if( maze.getDFSPath().size() == 0 ) maze.getPathFinder().findPathUsingDFS( startVertex, endVertex );
+        colorPath(g, maze.getDFSPath(), color, mazePoint, cell_unit);
     }
 
     private void drawAStarPath(Graphics g, Maze maze, Point mazePoint, MazeNode startVertex, MazeNode endVertex, double cell_unit, Color color) {
-        LinkedList<MazeNode> path = maze.pathFinder().findPathUsingAStar(startVertex, endVertex);
+        LinkedList<MazeNode> path = maze.getPathFinder().findPathUsingAStar(startVertex, endVertex);
         if (path == null) {
             System.err.println("AStar path is null.");
             return; // Do not attempt to draw a null path
@@ -234,22 +198,22 @@ public class RenderPanel extends JPanel {
     }
 
     private void drawMousePath( Graphics g, Maze maze, Point mazePoint, double cell_unit, Color color ) {
-        FloodFillSolver mouseSolver = gui.getMouse().getMouseSolver();
+        FloodFillSolver mouseSolver = mouse.getMouseSolver();
         /* mouse object should do this on its own when ready */
         if( !mouseSolver.isDone() ) return;
         colorPath( g, mouseSolver.getMousePath(), color, mazePoint, cell_unit );
     }
 
     private void colorPath(Graphics g, LinkedList<MazeNode> path, Color color, Point mazePoint, double cell_unit ) {
-        if (path == null || path.isEmpty()) {
-            System.err.println("Path is null or empty. Cannot draw path.");
-            return; // Early exit if path is null or empty
-        }
+//        if (path == null || path.isEmpty()) {
+//            System.err.println("Path is null or empty. Cannot draw path.");
+//            return; // Early exit if path is null or empty
+//        }
         final double PATH_PROPORTION = 0.1;
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor( color );
 
-        if(path.isEmpty()) return;
+        if(path.size() == 0) return;
         /* set starting location and trail width */
         MazeNode currentNode = path.removeFirst();
         int x = mazePoint.x + (int)(currentNode.getDiagonalX() * cell_unit + 0.5 * (1 - PATH_PROPORTION) * cell_unit);
@@ -258,7 +222,7 @@ public class RenderPanel extends JPanel {
         if( sideLength == 0 ) sideLength = 1;
         Rectangle cellBlock = new Rectangle( x, y, sideLength, sideLength );
 
-        while(!path.isEmpty()) {
+        while(path.size() != 0) {
             /* traverse through path */
             currentNode = path.removeFirst();
             x = mazePoint.x + (int)(currentNode.getDiagonalX() * cell_unit + 0.5 * (1 - PATH_PROPORTION) * cell_unit);
@@ -285,7 +249,7 @@ public class RenderPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         for( int row = 0; row < maze.getDimension(); row++ ) {
-            for( int column = 0; column < maze.getDimension(); column++  ) {
+            for( int column = 0; column < maze.getDimension(); column++) {
                 /* draw walls */
                 int x = column;
                 int y = row;
@@ -344,11 +308,11 @@ public class RenderPanel extends JPanel {
         g.setFont( new Font(Font.SANS_SERIF, Font.BOLD, (int)(0.05 * maze_diameter)) );
         g.setColor( EXCITEMENT_COLOR );
 
-        if( ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd()).size() == mouse.getMouseSolver().getMousePath().size() ) {
+        if( ref_maze.getDijkstraPath().size() == mouse.getMouseSolver().getMousePath().size() ) {
             message = "Most Optimal Solution Found!";
         }
         else {
-            message = "Non-optimal. Dijkstra: " + ref_maze.pathFinder().findPathUsingDijkstra(ref_maze.getBegin(), ref_maze.getEnd()).size() + " steps. Flood Fill: " + mouse.getMouseSolver().getMousePath().size() + " steps.";
+            message = "Non-optimal. Dijkstra: " + ref_maze.getDijkstraPath().size() + " steps. Flood Fill: " + mouse.getMouseSolver().getMousePath().size() + " steps.";
         }
 
         double width_offset  = g.getFontMetrics().stringWidth( message ) / 2.0;

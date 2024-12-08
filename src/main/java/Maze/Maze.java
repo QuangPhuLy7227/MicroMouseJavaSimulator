@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 public class Maze implements Iterable<MazeNode> {
     private static final int EVEN = 2;
     private final int dimension;
+    private int nonTreeEdges;
     private final MazeNode[][] maze;
     public MazeGenerator mazeGenerator;
     public MazeSerializer mazeSerializer;
@@ -17,6 +18,7 @@ public class Maze implements Iterable<MazeNode> {
 
     public Maze(int dimension) {
         this.dimension = dimension;
+        this.nonTreeEdges = 0;
         maze = new MazeNode[dimension][dimension];
         for (int row = 0; row < maze.length; row++){
             for (int column = 0; column < maze[0].length; column++) {
@@ -24,7 +26,7 @@ public class Maze implements Iterable<MazeNode> {
             }
         }
         mazeGenerator = new MazeGenerator(this);
-        mazeSerializer = new MazeSerializer();
+        mazeSerializer = new MazeSerializer(this);
         pathFinder = new PathFinder(this);
     }
 
@@ -33,6 +35,8 @@ public class Maze implements Iterable<MazeNode> {
         for (MazeNode node : this) {
             node.clearData();
         }
+        pathFinder.getDijkstraPath().clear();
+        pathFinder.getDfsPath().clear();
     }
 
     public int getDimension() {
@@ -66,6 +70,7 @@ public class Maze implements Iterable<MazeNode> {
             //quad-cell solution set
             int lowerBound = getDimension() / EVEN -1;
             for (int delta = 0; delta < EVEN; delta++) {
+                /* find target node with 3 children in quad-cell solution */
                 MazeNode topNode = at(lowerBound, lowerBound + delta);
                 MazeNode lowerNode = at( lowerBound + 1, lowerBound + delta );
                 if (topNode.getNeighborList().size() > EVEN) {
@@ -84,12 +89,14 @@ public class Maze implements Iterable<MazeNode> {
     //Create an undirected edge connect 2 vertex
     public void addEdge(MazeNode a, MazeNode b) {
         if (a == null || b == null) return;
+        /* undirected edge added */
         a.addNeighbor(b);
         b.addNeighbor(a);
     }
 
     public void removeEdge(MazeNode a, MazeNode b) {
         if (a == null || b ==null) return;
+        /* removing undirected edge */
         a.removeNeighbor(b);
         b.removeNeighbor(a);
     }
@@ -121,7 +128,7 @@ public class Maze implements Iterable<MazeNode> {
                 }
                 if (!outOfBounds(column + 1)) {
                     //Horizontal neighbor
-                    addEdge(currentNode, maze[row][column]);
+                    addEdge(currentNode, maze[row][column + 1]);
                 }
             }
         }
@@ -196,16 +203,34 @@ public class Maze implements Iterable<MazeNode> {
         }
     }
 
-    public MazeSerializer mazeSerializer() {
+    public MazeSerializer getMazeSerializer() {
         return mazeSerializer;
     }
 
-    public MazeGenerator mazeGenerator() {
+    public MazeGenerator getMazeGenerator() {
         return mazeGenerator;
     }
 
-    public PathFinder pathFinder() {
+    public PathFinder getPathFinder() {
         return pathFinder;
     }
-}
+    public int getNonTreeEdges() {
+        return nonTreeEdges;
+    }
 
+    public void setNonTreeEdges(int nte) {
+        nonTreeEdges = nte;
+    }
+
+    public LinkedList<MazeNode> getDijkstraPath() {
+        return new LinkedList<MazeNode>( pathFinder.getDijkstraPath() );
+    }
+
+    public LinkedList<MazeNode> getDFSPath() {
+        return new LinkedList<MazeNode>( pathFinder.getDfsPath() );
+    }
+
+    public int getTotalNonTreeEdges() {
+        return nonTreeEdges;
+    }
+}
