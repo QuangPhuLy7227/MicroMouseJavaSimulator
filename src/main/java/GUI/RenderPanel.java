@@ -36,18 +36,12 @@ public class RenderPanel extends JPanel {
     private final Point center = new Point();
 
     private final MazeGUI gui;
-    private Maze ref_maze;
-    private Maze mouse_maze;
-    private Mouse mouse;
 
     /**
      * Constructor: Creates a JPanel for the maze GUI.
      */
     public RenderPanel(MazeGUI gui) {
         this.gui = gui;
-        ref_maze = gui.getRefMaze();
-        mouse_maze = gui.getMouseMaze();
-        mouse = gui.getMouse();
         try {
             image = ImageIO.read(new File("../src/utility/images/gannon.png"));
         } catch (IOException e) {
@@ -87,7 +81,7 @@ public class RenderPanel extends JPanel {
         int maze_diameter = (int) (MazeGUI.MAZE_DEFAULT_PROPORTION * Math.min(getHeight(), getWidth()));
         int maze_radius = (int) (0.5 * maze_diameter);
         int maze_offset = (int) (0.25 * (getWidth() - 2 * maze_diameter));
-        double cell_unit = (1.0 / ref_maze.getDimension()) * maze_diameter;
+        double cell_unit = (1.0 / gui.getRefMaze().getDimension()) * maze_diameter;
 
         /* draws Gannon Logo - upper left corner */
         int image_diameter = (int) (0.4 * maze_diameter);
@@ -97,11 +91,11 @@ public class RenderPanel extends JPanel {
         /* draws the 2 square mazes in the center of the frame */
         leftMazePoint.setLocation(maze_offset, center.y - maze_radius);
         rightMazePoint.setLocation(center.x + maze_offset, center.y - maze_radius);
-        drawMaze(g, leftMazePoint, maze_diameter, ref_maze, false);
-        drawMaze(g, rightMazePoint, maze_diameter, mouse_maze, true);
+        drawMaze(g, leftMazePoint, maze_diameter, gui.getRefMaze(), false);
+        drawMaze(g, rightMazePoint, maze_diameter, gui.getMouseMaze(), true);
 
-        mouse.setGraphicsEnvironment(rightMazePoint, maze_diameter);
-        mouse.draw(g, MOUSE_COLOR);
+        gui.getMouse().setGraphicsEnvironment(rightMazePoint, maze_diameter);
+        gui.getMouse().draw(g, MOUSE_COLOR);
 
 //        MazeNode endNode = gui.getEndNode();
 //        if (endNode != null) {
@@ -116,23 +110,23 @@ public class RenderPanel extends JPanel {
 //        }
 
         if (gui.isRunDFS()) {
-            drawDFSPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, DFS_PATH_COLOR);
+            drawDFSPath(g, gui.getRefMaze(), leftMazePoint, gui.getRefMaze().getBegin(), gui.getRefMaze().getEnd(), cell_unit, DFS_PATH_COLOR);
         }
 
         if (gui.isRunDijkstra()) {
-            drawDijkstraPath( g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, DIJKSTRA_PATH_COLOR );
+            drawDijkstraPath( g, gui.getRefMaze(), leftMazePoint, gui.getRefMaze().getBegin(), gui.getRefMaze().getEnd(), cell_unit, DIJKSTRA_PATH_COLOR );
         }
 
         if (gui.isRunAStar()) {
-            drawAStarPath(g, ref_maze, leftMazePoint, ref_maze.getBegin(), ref_maze.getEnd(), cell_unit, ASTAR_PATH_COLOR);
+            drawAStarPath(g, gui.getRefMaze(), leftMazePoint, gui.getRefMaze().getBegin(), gui.getRefMaze().getEnd(), cell_unit, ASTAR_PATH_COLOR);
         }
 
-        FloodFillSolver mouseSolver = mouse.getMouseSolver();
+        FloodFillSolver mouseSolver = gui.getMouse().getMouseSolver();
 
-        if (mouse.getMouseSolver().isDone()) {
+        if (gui.getMouse().getMouseSolver().isDone()) {
             /* draws path found by mouse and checks if path is most optimal */
-            drawMousePath(g, mouse_maze, rightMazePoint, cell_unit, MOUSE_PATH_COLOR);
-            if( ref_maze.getDijkstraPath().size() == 0 ) ref_maze.getPathFinder().findPathUsingDijkstra( ref_maze.getBegin(), ref_maze.getEnd() );
+            drawMousePath(g, gui.getMouseMaze(), rightMazePoint, cell_unit, MOUSE_PATH_COLOR);
+            if( gui.getRefMaze().getDijkstraPath().size() == 0 ) gui.getRefMaze().getPathFinder().findPathUsingDijkstra( gui.getRefMaze().getBegin(), gui.getRefMaze().getEnd() );
             drawSolutionMessage(g, center, leftMazePoint, maze_diameter);
         }
 
@@ -140,8 +134,8 @@ public class RenderPanel extends JPanel {
             /* output statistics about the mouse's run */
             gui.setOutputStats(false);
             int mouse_visited = mouseSolver.getTotalCellsVisited();
-            int total = mouse_maze.getDimension() * mouse_maze.getDimension();
-            System.err.println("Proportion of cells visited by mouse: " + ((double)(mouse_visited) / total * 100) + "% on a dimension of " + mouse_maze.getDimension() + "x" + mouse_maze.getDimension());
+            int total = gui.getMouseMaze().getDimension() * gui.getMouseMaze().getDimension();
+            System.err.println("Proportion of cells visited by mouse: " + ((double)(mouse_visited) / total * 100) + "% on a dimension of " + gui.getMouseMaze().getDimension() + "x" + gui.getMouseMaze().getDimension());
             System.err.println("Total number of mouse runs: " + mouseSolver.getNumberOfRuns());
         }
     }
@@ -198,7 +192,7 @@ public class RenderPanel extends JPanel {
     }
 
     private void drawMousePath( Graphics g, Maze maze, Point mazePoint, double cell_unit, Color color ) {
-        FloodFillSolver mouseSolver = mouse.getMouseSolver();
+        FloodFillSolver mouseSolver = gui.getMouse().getMouseSolver();
         /* mouse object should do this on its own when ready */
         if( !mouseSolver.isDone() ) return;
         colorPath( g, mouseSolver.getMousePath(), color, mazePoint, cell_unit );
@@ -318,4 +312,5 @@ public class RenderPanel extends JPanel {
         double width_offset  = g.getFontMetrics().stringWidth( message ) / 2.0;
         g.drawString( message, (int)(center.x - width_offset), mazePoint.y + maze_diameter + (int)((getHeight() - maze_diameter) / 4.0) );
     }
+
 }

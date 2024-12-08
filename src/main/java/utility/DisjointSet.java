@@ -11,21 +11,37 @@ public class DisjointSet {
     }
 
     public MazeNode find(MazeNode vertex) {
-        Stack<MazeNode> stack = new Stack<MazeNode>();
-        stack.push( vertex );
-        while( vertex.parent != null ) {
-            /* find set representative */
-            vertex = vertex.parent;
-            stack.push( vertex );
-        }
-        MazeNode root = stack.pop();
+//        Stack<MazeNode> stack = new Stack<MazeNode>();
+//        stack.push( vertex );
+//        while( vertex.parent != null ) {
+//            /* find set representative */
+//            vertex = vertex.parent;
+//            stack.push( vertex );
+//        }
+//        MazeNode root = stack.pop();
+//
+//        while( !stack.empty() ) {
+//            /* path compression */
+//            vertex = stack.pop();
+//            vertex.parent = root;
+//            vertex.rank = 0;
+//        }
+//        return root;
+        MazeNode root = vertex;
 
-        while( !stack.empty() ) {
-            /* path compression */
-            vertex = stack.pop();
-            vertex.parent = root;
-            vertex.rank = 0;
+        // Find the root of the set
+        while (root.parent != root) {
+            root = root.parent;
         }
+
+        // Path compression
+        MazeNode current = vertex;
+        while (current != root) {
+            MazeNode next = current.parent;
+            current.parent = root;
+            current = next;
+        }
+
         return root;
     }
 

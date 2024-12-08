@@ -73,7 +73,7 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
         // Regenerate the maze
         gui.setRefMaze(new Maze(gui.getRefMaze().getDimension()));
         gui.setMouseMaze(new Maze(gui.getRefMaze().getDimension()));
-        gui.getRefMaze().getMazeGenerator().createRandomMaze(0, MazeGUI.DATAFILE);
+        gui.getRefMaze().getMazeGenerator().createRandomMaze(3); // I want a number between 2 and 5
 
         gui.setEndNode(gui.getRefMaze().getEnd());
         System.out.println("New End Node: " + gui.getEndNode());
