@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dc1fe98a-497f-48e0-a549-74ec554911f3" name="変更" comment="変更">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saveMazeFiles1.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saveMazeFiles2.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/PathCoverageTest/AStarTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/PathCoverageTest/DFSHelperTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/PathCoverageTest/DFSTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/PathCoverageTest/DijkstraTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/StatementCoverageTest/AStarTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/StatementCoverageTest/DFSHelperTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/StatementCoverageTest/DFSTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/StatementCoverageTest/DijkstraTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/MazeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Maze/MazeGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Maze/MazeSerializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Maze/PathFinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/easycode.ignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimulatorMMS.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Algorithms/AStar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Algorithms/AStar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Algorithms/DFS.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Algorithms/DFS.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Algorithms/Dijkstra.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Algorithms/Dijkstra.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/GUI/MazeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/GUI/MazeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/GUI/MazeGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/GUI/MazeGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/GUI/PeriscopeManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/GUI/PeriscopeManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/GUI/RenderPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/GUI/RenderPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/Maze$MazeIterator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/Maze$MazeIterator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/Maze.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/Maze.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/MazeGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/MazeGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/MazeNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/MazeNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/MazeSerializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/MazeSerializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/PathFinder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Maze/PathFinder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/FloodFillSolver.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/FloodFillSolver.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/Mouse.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/Mouse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/MouseShape.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/MouseShape.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/Orientation.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/Orientation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/PeriscopeHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Mouse/PeriscopeHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/PathCoverageTest/AStar_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/PathCoverageTest/AStar_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/PathCoverageTest/DFS_Helper_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/PathCoverageTest/DFS_Helper_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/PathCoverageTest/DFS_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/PathCoverageTest/DFS_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/PathCoverageTest/Dijkstra_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/PathCoverageTest/Dijkstra_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/StatementCoverageTest/AStar_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/StatementCoverageTest/AStar_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/StatementCoverageTest/DFS_Helper_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/StatementCoverageTest/DFS_Helper_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/StatementCoverageTest/DFS_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/StatementCoverageTest/DFS_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/StatementCoverageTest/Dijkstra_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/StatementCoverageTest/Dijkstra_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/Test/TDD/MazeGeneratorTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/utility/DisjointSet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/utility/DisjointSet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/utility/PQNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/utility/PQNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/utility/Pair.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/utility/Pair.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/utility/ParsingStrings.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaSimulatorMMS/utility/ParsingStrings.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Algorithms/AStar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Algorithms/AStar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Algorithms/DFS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Algorithms/DFS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Algorithms/Dijkstra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Algorithms/Dijkstra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/MazeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/MazeGUI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/PeriscopeManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/RenderPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RenderPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Maze/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Maze/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Maze/Maze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Maze/Maze.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Maze/MazeGenerator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Maze/MazeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Maze/MazeNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Maze/MazeSerializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Maze/PathFinder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mouse/FloodFillSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Mouse/FloodFillSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mouse/Mouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Mouse/Mouse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mouse/MouseShape.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Mouse/MouseShape.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mouse/Orientation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Mouse/Orientation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Mouse/PeriscopeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Mouse/PeriscopeHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MazeGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MazeGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/DisjointSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utility/DisjointSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/PQNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utility/PQNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utility/Pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utility/ParsingStrings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utility/ParsingStrings.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;AndreM222&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:AndreM222/MicroMouseJavaSimulator.git&quot;,
+    &quot;accountId&quot;: &quot;f59b0af7-72ec-4620-a6d8-44bcc27ec400&quot;
+  }
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2pAadA51wkBUsaqMEDI0yaJXa8c" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.MicroMouseJavaSimulator [:Maze.Main.main()].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Owner/Downloads/MicroMouse/JavaSimulatorMMS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propVCSSupport.Mappings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Maze.Main" />
+      <module name="MicroMouseJavaSimulator.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Maze.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="アプリケーションレベル" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="デフォルトタスク">
+      <changelist id="dc1fe98a-497f-48e0-a549-74ec554911f3" name="変更" comment="" />
+      <created>1732211418108</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1732211418108</updated>
+      <workItem from="1732547618682" duration="27269000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
