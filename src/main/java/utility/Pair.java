@@ -16,9 +16,10 @@ public class Pair<T, K> {
         if (o == this) {
             return true;
         }
-        if( !(o instanceof Pair<?, ?> pair) ) {
+        if( !(o instanceof Pair<?, ?>) ) {
             return false;
         }
+        Pair<?,?> pair = (Pair<?,?>) o;
         boolean elementOneExists = pair.first.equals( first ) || pair.first.equals( second );
         boolean elementTwoExists = pair.second.equals( first ) || pair.second.equals( second );
 

@@ -37,26 +37,27 @@ public class PathFinder {
     /**
      * Path optimization with regards to the mouse's ability to move in
      * diagonal directions.
+     *
      * @param path linked list path to be optimized.
      * @return Nothing.
      */
-    public LinkedList<MazeNode> optimize( LinkedList<MazeNode> path ) {
+    public LinkedList<MazeNode> optimize(LinkedList<MazeNode> path) {
         LinkedList<MazeNode> bestPath = new LinkedList<MazeNode>();
         MazeNode startVertex = path.peekFirst();
         MazeNode endVertex = path.peekLast();
 
-        bestPath.addLast( startVertex );
+        bestPath.addLast(startVertex);
 
-        while( path.size() > 1 ) {
+        while (path.size() > 1) {
             /* smoothen sharp turns by averaging direction */
             MazeNode currentNode = path.removeFirst();
             MazeNode nextNode = path.peekFirst();
-            double row_bar = 0.5 * ( currentNode.row + nextNode.row );
-            double column_bar = 0.5 * ( currentNode.column + nextNode.column );
-            bestPath.addLast( new MazeNode(row_bar, column_bar) );
+            double row_bar = 0.5 * (currentNode.row + nextNode.row);
+            double column_bar = 0.5 * (currentNode.column + nextNode.column);
+            bestPath.addLast(new MazeNode(row_bar, column_bar));
         }
 
-        bestPath.addLast( endVertex );
+        bestPath.addLast(endVertex);
         return bestPath;
     }
 

@@ -23,28 +23,6 @@ public class Main {
 
         controller = new MazeController(gui);
 
-        // Handle algorithm selection
-        String selectedAlgorithm = controller.handleSelectAlgoButtonEvent();
-
-        // Debug: Print selected algorithm
-        System.out.println("Selected algorithm: " + selectedAlgorithm);
-
-        // Update the algorithm state based on user selection
-        if ("DFS".equals(selectedAlgorithm)) {
-            dfs = true;
-            System.out.println("DFS selected. Updating states...");
-        } else if ("Dijkstra".equals(selectedAlgorithm)) {
-            dijkstra = true;
-            System.out.println("Dijkstra selected. Updating states...");
-        } else if ("AStar".equals(selectedAlgorithm)) {
-            astar = true;
-            System.out.println("AStar selected. Updating states...");
-        }
-
-        // Debug: Print the updated state after selection
-        System.out.println("Updated state after selection: DFS=" + dfs + ", Dijkstra=" + dijkstra + ", AStar=" + astar);
-        System.out.println("GUI State: runDFS=" + gui.isRunDFS() + ", runDijkstra=" + gui.isRunDijkstra() + ", runAStar=" + gui.isRunAStar());
-
         // Command-line argument parsing
         for (int index = 0; index < args.length; index++) {
             String flag = args[index];

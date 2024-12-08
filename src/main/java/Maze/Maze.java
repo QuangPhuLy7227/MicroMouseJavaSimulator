@@ -234,4 +234,3 @@ public class Maze implements Iterable<MazeNode> {
         return nonTreeEdges;
     }
 }
-

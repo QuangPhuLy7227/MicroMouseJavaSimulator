@@ -43,6 +43,11 @@ public class MazeGUI {
     private final MazeController controller;
     private MazeNode endNode;
 
+    // Timer variables
+    private JLabel timerLabel;
+//    private Timer timer;
+    private int elapsedTime;  // in seconds
+
     /**
      * Constructor: Creates and sets up MazeGUI
      *
@@ -103,6 +108,14 @@ public class MazeGUI {
         algoComboBox.setVisible(false);
         algoComboBox.addActionListener(controller);
 
+        // Timer initialization (initially just "Time:")
+        elapsedTime = 0;
+        timerLabel = new JLabel("Time:");  // Initially just "Time:"
+        timerLabel.setForeground(Color.BLACK);  // Set text color to black
+
+        renderPanel.add(timerLabel);
+
+
         /* JComboBox for different saved maze selection */
         String[] loadMazes = { "Select a Maze", "Maze 1", "Maze 2", "Maze 3" };
         loadMazeComboBox = new JComboBox<>(loadMazes);
@@ -117,6 +130,8 @@ public class MazeGUI {
         /* Panel to hold the JComboBox for load maze */
         algoPanel2 = new JPanel();
         algoPanel2.add(loadMazeComboBox);
+        JPanel loadMazePanel = new JPanel();
+        loadMazePanel.add(loadMazeComboBox);
 
         /* Activates button/comboBox to register state change */
         saveMazeButton.addActionListener(controller);
@@ -152,7 +167,7 @@ public class MazeGUI {
         /* set up south panel  */
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
         southPanel.add(southButtonPanel);
-        southPanel.add(algoPanel2);
+        southPanel.add(loadMazePanel);
 
         /* add panels with their buttons on the final window */
         Container contentPane = main_frame.getContentPane();
@@ -308,6 +323,19 @@ public class MazeGUI {
     public void setMouse(Mouse mouse) {
         this.mouse = mouse;
     }
+
+    public String getElapsedTime() {
+        return "Time: " + elapsedTime + " s";
+    }
+
+    public void setElapsedTime(int seconds) {
+        // This updates the timerLabel with the elapsed time in seconds
+        timerLabel.setText("Time: " + seconds + " sec");
+    }
+
+
+
+
 
 
 }

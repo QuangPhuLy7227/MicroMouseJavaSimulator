@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="dc1fe98a-497f-48e0-a549-74ec554911f3" name="変更" comment="変更">
       <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
@@ -94,6 +95,19 @@
       <change beforePath="$PROJECT_DIR$/src/utility/PQNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utility/PQNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utility/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utility/Pair.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utility/ParsingStrings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utility/ParsingStrings.java" afterDir="false" />
+=======
+    <list default="true" id="dc1fe98a-497f-48e0-a549-74ec554911f3" name="変更" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saveMazeFiles1.dat" beforeDir="false" afterPath="$PROJECT_DIR$/saveMazeFiles1.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Algorithms/DFS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Algorithms/DFS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Algorithms/Dijkstra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Algorithms/Dijkstra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MazeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MazeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MazeGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MazeGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RenderPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RenderPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Maze/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Maze/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Maze/MazeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Maze/MazeNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Maze/MazeSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Maze/MazeSerializer.java" afterDir="false" />
+>>>>>>> daf92cc24830973dc102098a6ad35e2cdc369742
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,6 +130,13 @@
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -159,10 +180,17 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+<<<<<<< HEAD
     "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "project.propVCSSupport.Mappings",
+=======
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "advanced.settings",
+>>>>>>> daf92cc24830973dc102098a6ad35e2cdc369742
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -235,13 +263,14 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732211418108</updated>
-      <workItem from="1732547618682" duration="27269000" />
+      <workItem from="1732547618682" duration="45328000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+<<<<<<< HEAD
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -253,6 +282,8 @@
       </map>
     </option>
   </component>
+=======
+>>>>>>> daf92cc24830973dc102098a6ad35e2cdc369742
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
