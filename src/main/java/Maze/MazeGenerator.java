@@ -4,6 +4,7 @@ import utility.DisjointSet;
 import utility.Pair;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -22,12 +23,12 @@ public class MazeGenerator {
         createRandomMaze();
     }
 
-    public void createRandomMaze(File datafile) {
+    public void createRandomMaze(File datafile) throws IOException {
         createRandomMaze();
         maze.getMazeSerializer().saveMaze(datafile);
     }
 
-    public void createRandomMaze(int non_tree_edges, File datafile) {
+    public void createRandomMaze(int non_tree_edges, File datafile) throws IOException {
         createRandomMaze(non_tree_edges);
         maze.getMazeSerializer().saveMaze(datafile);
     }

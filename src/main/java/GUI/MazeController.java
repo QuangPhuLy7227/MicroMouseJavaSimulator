@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -140,13 +141,17 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
             // Get the maze dimension
             int mazeDimension = gui.getRefMaze().getDimension();
             // Append the maze dimension at the beginning of the file name
-            if (!fileName.endsWith(".dat")) {
-                fileName += ".dat";
+            if (!fileName.endsWith(".dat") && !fileName.endsWith(".map") && !fileName.endsWith(".num")) {
+                fileName += ".dat"; // Default to `.dat` if no valid extension is provided
             }
             fileName = mazeDimension + "_" + fileName;
             File updatedFileToSave = new File(fileChooser.getCurrentDirectory(), fileName);
             if (mazeSerializer != null) {
-                mazeSerializer.saveMaze(updatedFileToSave);
+                try {
+                    mazeSerializer.saveMaze(updatedFileToSave);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println("Maze saved to: " + updatedFileToSave.getAbsolutePath());
             } else {
                 System.out.println("Maze serializer is null");
@@ -174,7 +179,12 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
             }
 
             if (mazeSerializer != null) {
-                boolean loadSuccess = mazeSerializer.loadMaze(fileToLoad);
+                boolean loadSuccess = false;
+                try {
+                    loadSuccess = mazeSerializer.loadMaze(fileToLoad);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 if (loadSuccess) {
                     System.out.println("Maze loaded successfully from: " + fileToLoad.getAbsolutePath());
                     gui.getRenderPanel().repaint(); // Update the UI with the loaded maze
@@ -205,7 +215,7 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
         gui.getRenderPanel().repaint();
     }
 
-    private void handleMazeButtonEvent() {
+    private void handleMazeButtonEvent() throws IOException {
         System.err.println( "\nnew maze" );
         gui.getAnimateButton().setText( "Animate" );
         if( gui.getAnimationCLK().isRunning() == true ) gui.getAnimationCLK().stop();

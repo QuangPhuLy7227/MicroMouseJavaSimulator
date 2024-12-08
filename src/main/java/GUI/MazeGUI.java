@@ -7,11 +7,12 @@ import Mouse.Mouse;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 public class MazeGUI extends Component {
     public static final double MAZE_DEFAULT_PROPORTION = 0.50;
-    public static final File DATAFILE = new File("../datafile");
+    public static final File DATAFILE = new File("../MazeFiles/16_maze01.data.dat");
 
     private Maze ref_maze;
     private Maze mouse_maze;
@@ -61,9 +62,13 @@ public class MazeGUI extends Component {
         if (dimension < 1) dimension = 1;
         ref_maze = new Maze(dimension);
         mouse_maze = new Maze(dimension);
-        if(ref_maze.getMazeSerializer().loadMaze(DATAFILE) == false) {
-            /* load datafile - otherwise create new random maze if that didn't work */
-            ref_maze.getMazeGenerator().createRandomMaze( non_tree_edges, DATAFILE );
+        try {
+            if(ref_maze.getMazeSerializer().loadMaze(DATAFILE) == false) {
+                /* load datafile - otherwise create new random maze if that didn't work */
+                ref_maze.getMazeGenerator().createRandomMaze( 3);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         mouse = new Mouse(dimension - 1, 0, ref_maze, mouse_maze);
         runDijkstra = dijkstra;
