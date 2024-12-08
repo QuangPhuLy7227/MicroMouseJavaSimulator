@@ -7,6 +7,7 @@ import Mouse.Mouse;
 import Maze.MazeNode;
 import Maze.PathFinder;
 
+import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.event.ActionEvent;
@@ -118,51 +119,74 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
     }
 
     private void handleSaveMazeButtonEvent() {
-        if (saveCount >= MAX_SAVES) {
-            System.out.println("Maximum number of saves reached. Cannot save more mazes.");
-            return;
+        // Create a file chooser dialog
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save Maze");
+
+        File defaultDirectory = new File("C:\\Users\\Owner\\Downloads\\MicroMouse\\JavaSimulatorMMS\\MazeFiles");
+        if (defaultDirectory.exists()) {
+            fileChooser.setCurrentDirectory(defaultDirectory);
         }
 
-        File fileToSave = savedMazeFiles[saveCount];
-        if (mazeSerializer != null) {
-            mazeSerializer.saveMaze(fileToSave);
-            System.out.println("Maze saved to: " + fileToSave.getAbsolutePath());
-            saveCount++;
+        // Set the file chooser to select files only
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        // Show the save dialog
+        int userSelection = fileChooser.showSaveDialog(gui);
+
+        if(userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String fileName = fileToSave.getName();
+            // Get the maze dimension
+            int mazeDimension = gui.getRefMaze().getDimension();
+            // Append the maze dimension at the beginning of the file name
+            if (!fileName.endsWith(".dat")) {
+                fileName += ".dat";
+            }
+            fileName = mazeDimension + "_" + fileName;
+            File updatedFileToSave = new File(fileChooser.getCurrentDirectory(), fileName);
+            if (mazeSerializer != null) {
+                mazeSerializer.saveMaze(updatedFileToSave);
+                System.out.println("Maze saved to: " + updatedFileToSave.getAbsolutePath());
+            } else {
+                System.out.println("Maze serializer is null");
+            }
         } else {
-            System.out.println("Maze serializer is null");
+            System.out.println("Save operation cancelled by the user.");
         }
     }
 
     public void handleLoadSaveMazeButtonEvent() {
-        File[] savedMazeFiles = getSavedMazeFiles();
-        String selectedMaze = (String) gui.getLoadMazeComboBox().getSelectedItem();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Load Maze");
 
-        if ("Select a Maze".equals(selectedMaze)) {
-            System.out.println("No maze selected");
-            return;
+        File defaultDirectory = new File("C:\\Users\\Owner\\Downloads\\MicroMouse\\JavaSimulatorMMS\\MazeFiles");
+        if (defaultDirectory.exists()) {
+            fileChooser.setCurrentDirectory(defaultDirectory);
         }
-
-        if (selectedMaze != null) {
-            switch (selectedMaze) {
-                case "Maze 1":
-                    mazeSerializer.loadMaze(savedMazeFiles[0]);
-                    System.out.println("Loading Maze 1");
-                    break;
-                case "Maze 2":
-                    mazeSerializer.loadMaze(savedMazeFiles[1]);
-                    System.out.println("Loading Maze 2");
-                    break;
-                case "Maze 3":
-                    mazeSerializer.loadMaze(savedMazeFiles[2]);
-                    System.out.println("Loading Maze 3");
-                    break;
-                default:
-                    System.out.println("Invalid selection");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int userSelection = fileChooser.showOpenDialog(gui);
+        if(userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToLoad = fileChooser.getSelectedFile();
+            if (!fileToLoad.exists() || !fileToLoad.isFile()) {
+                System.out.println("Invalid file selected. Please choose a valid maze file.");
+                return;
             }
-        }
 
-        gui.getLoadMazeComboBox().setVisible(false);
-        gui.getRenderPanel().repaint(); // Ensure the panel is updated with the new maze
+            if (mazeSerializer != null) {
+                boolean loadSuccess = mazeSerializer.loadMaze(fileToLoad);
+                if (loadSuccess) {
+                    System.out.println("Maze loaded successfully from: " + fileToLoad.getAbsolutePath());
+                    gui.getRenderPanel().repaint(); // Update the UI with the loaded maze
+                } else {
+                    System.out.println("Failed to load maze. Please check the file format.");
+                }
+            } else {
+                System.out.println("Maze serializer is null");
+            }
+        } else {
+            System.out.println("Load operation cancelled by the user.");
+        }
     }
 
 

@@ -9,7 +9,7 @@ public class Main {
         MazeGUI gui = null;
         MazeController controller;
 
-        int dimension = 18;
+        int dimension = 16;
         int non_tree_edges = 0;
         boolean dijkstra = false;
         boolean dfs = false;

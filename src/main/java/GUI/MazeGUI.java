@@ -9,7 +9,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.Objects;
 
-public class MazeGUI {
+public class MazeGUI extends Component {
     public static final double MAZE_DEFAULT_PROPORTION = 0.50;
     public static final File DATAFILE = new File("../datafile");
 
@@ -121,7 +121,7 @@ public class MazeGUI {
         loadMazeComboBox = new JComboBox<>(loadMazes);
         loadMazeComboBox.setSelectedIndex(0);
         loadMazeComboBox.setVisible(false);
-        loadMazeComboBox.addActionListener(e -> handleLoadMazeSelection());
+//        loadMazeComboBox.addActionListener(e -> handleLoadMazeSelection());
 
         /* Panel to hold the JComboBox for algorithm */
         algoPanel1 = new JPanel();
@@ -139,7 +139,7 @@ public class MazeGUI {
         newMazeButton.addActionListener(controller);
         nextButton.addActionListener(controller);
         selectAlgoButton.addActionListener(controller);
-        loadMazeButton.addActionListener(e -> toggleLoadMazeDropDown());
+        loadMazeButton.addActionListener(controller);
 
         /* north button panel buttons */
         northButtonPanel.add(animateButton);
@@ -181,40 +181,40 @@ public class MazeGUI {
     }
 
 
-    private void toggleLoadMazeDropDown() {
-        loadMazeComboBox.setVisible((!loadMazeComboBox.isVisible()));
-    }
-
-    public void handleLoadMazeSelection() {
-        File[] savedMazeFiles = controller.getSavedMazeFiles();
-        String selectedMaze = (String) loadMazeComboBox.getSelectedItem();
-
-        if ("Select a Maze".equals(selectedMaze)) {
-            System.out.println("No maze selected");
-            return;
-        }
-
-        if (selectedMaze != null) {
-            switch (selectedMaze) {
-                case "Maze 1":
-                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[0]);
-                    System.out.println("Loading Maze 1");
-                    break;
-                case "Maze 2":
-                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[1]);
-                    System.out.println("Loading Maze 2");
-                    break;
-                case "Maze 3":
-                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[2]);
-                    System.out.println("Loading Maze 3");
-                    break;
-                default:
-                    System.out.println("Invalid selection");
-            }
-        }
-
-        loadMazeComboBox.setVisible(false);
-    }
+//    private void toggleLoadMazeDropDown() {
+//        loadMazeComboBox.setVisible((!loadMazeComboBox.isVisible()));
+//    }
+//
+//    public void handleLoadMazeSelection() {
+//        File[] savedMazeFiles = controller.getSavedMazeFiles();
+//        String selectedMaze = (String) loadMazeComboBox.getSelectedItem();
+//
+//        if ("Select a Maze".equals(selectedMaze)) {
+//            System.out.println("No maze selected");
+//            return;
+//        }
+//
+//        if (selectedMaze != null) {
+//            switch (selectedMaze) {
+//                case "Maze 1":
+//                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[0]);
+//                    System.out.println("Loading Maze 1");
+//                    break;
+//                case "Maze 2":
+//                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[1]);
+//                    System.out.println("Loading Maze 2");
+//                    break;
+//                case "Maze 3":
+//                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[2]);
+//                    System.out.println("Loading Maze 3");
+//                    break;
+//                default:
+//                    System.out.println("Invalid selection");
+//            }
+//        }
+//
+//        loadMazeComboBox.setVisible(false);
+//    }
 
     public Maze getRefMaze() {
         return ref_maze;
