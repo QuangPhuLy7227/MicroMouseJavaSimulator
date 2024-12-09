@@ -1,27 +1,23 @@
-package StatementCoverageTest;
-
-import Algorithms.AStar;
+import Algorithms.Dijkstra;
 import Maze.Maze;
 import Maze.MazeNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AStarTest {
+public class DijkstraTestStatement {
     private Maze maze;
-    private AStar aStar;
+    private Dijkstra dijkstra;
     private MazeNode nodeA;
     private MazeNode nodeB;
 
     @BeforeEach
     public void init() {
         maze = new Maze(5);
-        aStar = new AStar(maze);
+        dijkstra = new Dijkstra(maze);
     }
 
     /**
@@ -32,12 +28,12 @@ public class AStarTest {
      */
     @Test
     public void testNullStartOrNullEnd() {
-        assertNull(aStar.findPath(null, maze.at(4, 4)));
-        assertNull(aStar.findPath(maze.at(0, 0), null));
+        assertNull(dijkstra.findPath(null, maze.at(4, 4)));
+        assertNull(dijkstra.findPath(maze.at(0, 0), null));
     }
 
     /**
-     * Test 2 - there is a valid path found using AStar
+     * Test 2 - there is a valid path found using Dijkstra
      * Path: (1) -> (2) -> (5) -> (6) -> (5) -> (7) -> (8) -> (14) -> (15) -> (16) -> (17) -> (18) -> (19)
      * -> (20) -> (17) -> (8) -> (9) -> (10) -> (11) -> (10) -> (12) -> (13) -> End (refer to the CFD)
      * Input:
@@ -116,7 +112,7 @@ public class AStarTest {
 
         nodeA = maze.at(0, 0);
         nodeB = maze.at(4, 4);
-        LinkedList<MazeNode> path = aStar.findPath(nodeA, nodeB);
+        LinkedList<MazeNode> path = dijkstra.findPath(nodeA, nodeB);
 
         assertNotNull(path);
         assertEquals(nodeA, path.getFirst());
@@ -124,11 +120,11 @@ public class AStarTest {
     }
 
     /**
-     * Test 3 - No path is found using AStar
+     * Test 3 - No path is found using Dijkstra
      * Path: (1) -> (2) -> (5) -> (6) -> (5) -> (7) -> (8) -> (14) -> (15) -> (16) -> (17) -> (18) -> (19) -> (20)
      * -> (17) -> (8) -> (9) -> (10) -> (11) -> (10) -> (12) -> (14) -> (4) -> End (refer to the CFD)
      * Input:((0,0), (4,4))
-     * Expected: No path found from start to end vertex using AStar
+     * Expected: No path found from start to end vertex using Dijkstra
      */
     @Test
     public void testNoPathFound() {
@@ -149,7 +145,7 @@ public class AStarTest {
         nodeA = maze.at(0,0);
         nodeB = maze.at(4,4);
 
-        LinkedList<MazeNode> path = aStar.findPath(nodeA, nodeB);
+        LinkedList<MazeNode> path = dijkstra.findPath(nodeA, nodeB);
         assertNull(path, "Path should be null when end node is disconnected");
     }
 }

@@ -1,48 +1,47 @@
-package Test.PathCoverageTest;
-
 import Maze.Maze;
 import Maze.MazeNode;
 import Algorithms.DFS;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.LinkedList;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-public class DFS_Test {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class DFSTestPath {
     private Maze maze;
     private DFS dfs;
     private MazeNode start;
     private MazeNode end;
 
-    @Before
+    @BeforeEach
     public void init() {
         maze = new Maze(10);
         dfs = new DFS(maze);
     }
 
-    @Test
     /**
      * Path 1 - startVertex is null or endVertex is null
      * Path: (3) -> (4) -> (5) -> (6) -> End (refer to the CFD)
      * Input: (null, (4, 4)) || ((0,0))
      * Expected: Invalid starting or ending vertex for DFS
      */
+    @Test
     public void testNullStartOrNullEnd() {
         assertNull(dfs.findPath(null, maze.at(4, 4)));
         assertNull(dfs.findPath(maze.at(0, 0), null));
     }
 
-    @Test
     /**
      * Path 2 - path exists (straight-line: unidirectional movement)
      * Path: (3) -> (4) -> (7) -> (8) -> (7) -> (9) -> (10) -> 11 -> End (refer to the CFD)
      * Input:
      * Expected: Path found
      */
+    @Test
     public void testPathFound() {
         // Connect adjacent nodes
         start = maze.at(0,0);
@@ -57,7 +56,7 @@ public class DFS_Test {
         maze.addEdge(node3, end);
 
         LinkedList<MazeNode> path = dfs.findPath(start, end);
-        assertTrue("Path should contain the end node", path.contains(end));
+        assertTrue(path.contains(end), "Path should contain the end node");
 
 
         System.out.print("Path found: ");
@@ -70,13 +69,13 @@ public class DFS_Test {
         System.out.println();
     }
 
-    @Test
     /**
      * Path 3 - path does not exist (connected random nodes in the maze)
      * Path: (3) -> (4) -> (7) -> (8) -> (7) -> (9) -> (10) -> 12 -> End (refer to the CFD)
      * Input:
      * Expected: No path found from start to end vertex using DFS
      */
+    @Test
     public void testNoPath() {
         start = maze.at(0, 0);
         MazeNode node1 = maze.at(1, 0);
@@ -91,6 +90,6 @@ public class DFS_Test {
         LinkedList<MazeNode> path = dfs.findPath(start, end);
 
         String message = "No path found from start to end vertex using DFS";
-        assertNull(message, path);
+        assertNull(path, message);
     }
 }

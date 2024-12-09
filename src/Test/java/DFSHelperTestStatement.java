@@ -1,4 +1,3 @@
-package StatementCoverageTest;
 import Maze.Maze;
 import Maze.MazeNode;
 import Algorithms.DFS;
@@ -12,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DFSHelperTest {
+public class DFSHelperTestStatement {
     private Maze maze;
     private DFS dfs;
 

@@ -1,42 +1,43 @@
-package Test.PathCoverageTest;
 import Maze.Maze;
 import Maze.MazeNode;
 import Algorithms.DFS;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.LinkedList;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class DFS_Helper_Test {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class DFSHelperTestPath {
     private Maze maze;
     private DFS dfs;
     private MazeNode start;
     private MazeNode end;
 
-    @Before
+    @BeforeEach
     public void init(){
         maze = new Maze(10);
         dfs = new DFS(maze);
     }
 
-    @Test
     /**
      * Path 1 - startVertex is the same node as endVertex
      * Path: (2) -> (3) -> (4) -> End (refer to the CFD)
      * Input: ((1,1), (1,1), path)
      * Expected: true
      */
+    @Test
     public void testSameStartAndEndVertex(){
         start = maze.at(1,1);
         end = maze.at(1,1);
 
         LinkedList<MazeNode> path = dfs.findPath(start, end);
 
-        assertNotNull("Path should not be null", path);
-        assertTrue("Path should contain the start node", path.contains(start));
-        assertTrue("Path should contain the end node", path.contains(end));
+        assertNotNull(path, "Path should not be null");
+        assertTrue(path.contains(start), "Path should contain the start node");
+        assertTrue(path.contains(end), "Path should contain the end node");
 
         // Print the path found
         System.out.print("Path found: ");
@@ -46,13 +47,13 @@ public class DFS_Helper_Test {
         System.out.println();
     }
 
+    /**
+     * Path 2 - enter the recursive calls with backtracking and a path was found
+     * Path: (2) -> (3) -> (5) -> (6) -> (7) -> (6) -> (7) -> (8) -> (4) -> End (refer to the CFD)
+     * Input: ((2,0), (2,1), path)
+     * Expected: Path found
+     */
     @Test
-/**
- * Path 2 - enter the recursive calls with backtracking and a path was found
- * Path: (2) -> (3) -> (5) -> (6) -> (7) -> (6) -> (7) -> (8) -> (4) -> End (refer to the CFD)
- * Input: ((2,0), (2,1), path)
- * Expected: Path found
- */
     public void testBacktrackingWithPathFound() {
         start = maze.at(2, 0);              // A at (2,0)
         MazeNode node2 = maze.at(3, 0);     // D at (3,0)
@@ -81,9 +82,9 @@ public class DFS_Helper_Test {
 
         LinkedList<MazeNode> path = dfs.findPath(start, end);
 
-        assertNotNull("Path should not be null, indicating a path was found", path);
-        assertTrue("Path should contain the start node", path.contains(start));
-        assertTrue("Path should contain the end node", path.contains(end));
+        assertNotNull(path, "Path should not be null, indicating a path was found");
+        assertTrue(path.contains(start), "Path should contain the start node");
+        assertTrue(path.contains(end), "Path should contain the end node");
 
         // Print the path found
         System.out.print("Path found: ");
@@ -93,16 +94,13 @@ public class DFS_Helper_Test {
         System.out.println("End");
     }
 
-
-
-
-    @Test
     /**
     * Path 3 - enter the recursive calls with backtracking but no path was found
     * Path: (2) -> (3) -> (5) -> (6) -> (7) -> (8) -> (6) -> (9) -> (10) -> End (refer to the CFD)
     * Input: ((2,0), (9,0), path)
     * Expected: No path found from start to end vertex using DFS
     */
+    @Test
     public void testBackTrackingWithNoPathFound() {
 
         MazeNode startNode = maze.at(2, 0);
@@ -115,16 +113,16 @@ public class DFS_Helper_Test {
 
         LinkedList<MazeNode> path = dfs.findPath(startNode, endNode);
 
-        assertNull("Path should be null, indicating no path was found", path);
+        assertNull(path, "Path should be null, indicating no path was found");
     }
 
-    @Test
     /**
      * Path 4 - startVertex has no neighbor
      * Path: (2) -> (3) -> (5) -> (6) -> (9) -> (10) -> End (refer to the CFD)
      * Input: ((2,0), (9,0), path)
      * Expected: No path found from start to end vertex using DFS
      */
+    @Test
     public void testWithNoNeighbor() {
         MazeNode startNode = maze.at(2, 0);
         MazeNode node2 = maze.at(7, 0);
@@ -136,8 +134,6 @@ public class DFS_Helper_Test {
 
         LinkedList<MazeNode> path = dfs.findPath(node2, endNode);
 
-        assertNull("Path should be null, indicating no path found from start to end vertex using DFS", path);
+        assertNull(path, "Path should be null, indicating no path found from start to end vertex using DFS");
     }
-
-
 }
