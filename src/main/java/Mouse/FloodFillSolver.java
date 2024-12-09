@@ -10,11 +10,14 @@ import java.util.Stack;
 
 public class FloodFillSolver {
     private final Mouse mouse;
+    private FloodFillEventListener eventListener;
     private final Point center = new Point();
     private final Stack<MazeNode> exploreStack = new Stack<MazeNode>();
-    private final LinkedList<MazeNode> mousePath = new LinkedList<>();
-    private final LinkedList<MazeNode> previousPath = new LinkedList<>();
+    private LinkedList<MazeNode> mousePath = new LinkedList<>();
+    private  LinkedList<MazeNode> previousPath = new LinkedList<>();
+    private final LinkedList<MazeNode> diagonalPath = new LinkedList<>();
     private boolean done = false;
+    private boolean diagonalAttempt = false;
     private int numOfRuns = 0;
 
     public FloodFillSolver(Mouse mouse) {
@@ -22,15 +25,26 @@ public class FloodFillSolver {
         exploreStack.push(mouse.getMaze().at(mouse.getRow(), mouse.getColumn()));
     }
 
+    public void setEventListener(FloodFillEventListener listener) {
+        this.eventListener = listener;
+    }
 
     public void setup() {
         clearMazeMemory();
-        mouse.moveTo(mouse.getMaze().at(15, 0));
+        if (eventListener != null) {
+            eventListener.onRunReset();
+            eventListener.onRunStart();
+        }
+        mouse.moveTo(mouse.getMaze().at(mouse.getMaze().getDimension(), 0));
         mouse.rotateTo(Orientation.NORTH);
+        // Start the timer after initialization
+        if (eventListener != null) {
+            eventListener.onRunStart();
+        }
     }
 
     public void loop() {
-        exploreStack.push(mouse.getMaze().at(15, 0));
+        exploreStack.push(mouse.getMaze().at(mouse.getMaze().getDimension(), 0));
         MazeNode cell = exploreStack.pop();
         mouse.rotateTo(cell);
         mouse.moveTo(cell);
@@ -44,13 +58,25 @@ public class FloodFillSolver {
      */
     public boolean exploreNextCell() {
         if (exploreStack.isEmpty()) {
-            // Target reached
             done = true;
             trackSteps();
-            if (mousePath.size() == previousPath.size() && isCompletePath(mousePath)) return false;
+            // Check if current path is complete and diagonal attempt hasn't been made
+            if (mousePath.size() == previousPath.size() && isCompletePath(mousePath) && !diagonalAttempt) {
+                startDiagonalPathAttempt();
+                return false;
+            }
+
+            // If diagonal attempt has been made and paths are the same, we're done
+            if (diagonalAttempt && mousePath.size() == previousPath.size()) {
+                return false;
+            }
             done = false;
             retreat();
             setPreviousPath(mousePath);
+            // If we just completed a diagonal attempt, reset the flag
+            if (diagonalAttempt) {
+                diagonalAttempt = false;
+            }
             return false;
         }
 
@@ -62,21 +88,54 @@ public class FloodFillSolver {
 
         calibrateDistance(currentCell);
 
-        // Find the next cell to move to
-//        MazeNode nextCell = null;
+        // If in diagonal attempt mode, use diagonal neighbors
+        if (diagonalAttempt) {
+            for (MazeNode diagonalNeighbor : currentCell.getDiagonalNeighborList()) {
+                if (diagonalNeighbor.distance == currentCell.distance - 1) {
+                    exploreStack.push(diagonalNeighbor);
+                    return true;
+                }
+            }
+        }
+        // Regular neighbor exploration
         for (MazeNode openNeighbor : currentCell.getNeighborList()) {
             if (openNeighbor.distance == currentCell.distance - 1) {
                 exploreStack.push(openNeighbor);
-                if( openNeighbor.distance == 0 ) exploreStack.push( openNeighbor );
-                return true;
-            }
-            else if( openNeighbor.distance == 0 && mouse.visited( openNeighbor ) == false ) {
-                /* visit all target nodes in quad-cell solution */
-                exploreStack.push( openNeighbor );
                 return true;
             }
         }
         return true;
+    }
+
+    private LinkedList<MazeNode> calculateDiagonalPath() {
+        LinkedList<MazeNode> diagonalPath = new LinkedList<>();
+        MazeNode current = mouse.getMaze().at(mouse.getRow(), mouse.getColumn());
+        MazeNode target = mouse.getMaze().getEnd();
+
+        while (!current.equals(target)) {
+            MazeNode next = null;
+            for (MazeNode diagonalNeighbor : current.getDiagonalNeighborList()) {
+                if (diagonalNeighbor.distance < current.distance) {
+                    next = diagonalNeighbor;
+                    break;
+                }
+            }
+            if (next == null) {
+                for (MazeNode neighbor : current.getNeighborList()) {
+                    if (neighbor.distance < current.distance) {
+                        next = neighbor;
+                        break;
+                    }
+                }
+            }
+            if (next != null) {
+                diagonalPath.add(next);
+                current = next;
+            } else {
+                break; // If no valid move, stop pathfinding
+            }
+        }
+        return diagonalPath;
     }
 
     private void calibrate(MazeNode cell) {
@@ -123,12 +182,21 @@ public class FloodFillSolver {
      * Continue exploring maze by retreating to the starting position.
      */
     private void retreat() {
+        if (eventListener != null) {
+            eventListener.onRunReset(); // Notify listener about reset
+        }
         Point start_position = mouse.getStartPosition();
         MazeNode newTargetCell = mouse.getMaze().at(start_position);
         start_position.setLocation(mouse.getX(), mouse.getY());
         updateMazeDistance(newTargetCell);
+        done = false;
         exploreStack.push(mouse.getMaze().at(mouse.getRow(), mouse.getColumn()));
         numOfRuns++;
+
+        // Restart timer for new attempt
+        if (eventListener != null) {
+            eventListener.onRunStart();
+        }
     }
 
     /**
@@ -197,36 +265,23 @@ public class FloodFillSolver {
         MazeNode[] refNeighbors = { refCell.up, refCell.right, refCell.down, refCell.left };
         MazeNode[] neighbors = { cell.up, cell.right, cell.down, cell.left };
 
-        Orientation point = orientation.relativeLeft();
-        while (point != orientation.relativeBack()) {
-            /* sweep across the left wall, up wall, and right wall */
-            if (refNeighbors[point.ordinal()] == null) {
-                /* wall found in reference maze */
-                mouse.getMaze().removeEdge(cell, neighbors[point.ordinal()]);
-            }
-            point = point.next();
-        }
-    }
-
-//    private void markNeighborWalls(MazeNode cell, Orientation orientation) {
-//        if (orientation == null) {
-//            orientation = Orientation.NORTH; // Default to NORTH
-//        }
-//
-//        MazeNode refCell = refMaze.at(cell.row, cell.column);
-//        MazeNode[] refNeighbors = { refCell.up, refCell.right, refCell.down, refCell.left };
-//        MazeNode[] neighbors = { cell.up, cell.right, cell.down, cell.left };
-//
 //        Orientation point = orientation.relativeLeft();
 //        while (point != orientation.relativeBack()) {
 //            /* sweep across the left wall, up wall, and right wall */
 //            if (refNeighbors[point.ordinal()] == null) {
 //                /* wall found in reference maze */
-//                maze.removeEdge(cell, neighbors[point.ordinal()]);
+//                mouse.getMaze().removeEdge(cell, neighbors[point.ordinal()]);
 //            }
 //            point = point.next();
 //        }
-//    }
+
+        for (int i = 0; i < refNeighbors.length; i++) {
+            if (refNeighbors[i] == null) {
+                // Wall found in reference maze
+                mouse.getMaze().removeEdge(cell, neighbors[i]);
+            }
+        }
+    }
 
 
     /**
@@ -361,4 +416,28 @@ public class FloodFillSolver {
     public Stack<MazeNode> getExploreStack() {
         return exploreStack;
     }
+
+    private void startDiagonalPathAttempt() {
+        diagonalPath.clear();
+        diagonalPath.addAll(calculateDiagonalPath());
+        if (!diagonalPath.isEmpty()) {
+            // Reset the maze memory and prepare for diagonal path
+            clearMazeMemory();
+            exploreStack.clear();
+            exploreStack.push(mouse.getMaze().at(mouse.getStartPosition()));
+
+            // Mark the diagonal path nodes as visited
+            for (MazeNode node : diagonalPath) {
+                mouse.setVisited(node, true);
+            }
+
+            // Update maze distances based on the end point
+            updateMazeDistance(mouse.getMaze().getEnd());
+
+            // Set flag for diagonal attempt
+            diagonalAttempt = true;
+            mousePath = diagonalPath;
+        }
+    }
+
 }

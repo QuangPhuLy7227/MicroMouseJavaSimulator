@@ -22,24 +22,6 @@ public class Mouse {
     private FloodFillSolver mouseSolver;
     private MouseShape mouseShape;
 
-    // Creates mouse object on GUI // Phu
-//    public Mouse(int row, int column, Maze ref_maze, Maze maze) {
-//        this.row = this.y = row;
-//        this.column = this.x = column;
-//        this.ref_maze = ref_maze;
-//        this.maze = maze;
-//        this.mouse = new MouseShape();
-//        this.origin = new Point(x, y);
-//        this.start_position = new Point(x, y);
-//        this.visited = new boolean[maze.getDimension()][maze.getDimension()];
-//
-//        // Initialize the mouseSolver object before starting it
-//        // Ensure Mouse, ref_maze, and maze are initialized
-//        this.mouseSolver = new FloodFillSolver(this, ref_maze, maze);
-//
-//        mouseSolver.start(); // Now it's safe to invoke start()
-//    }
-
     public Mouse(int row, int column, Maze ref_maze, Maze maze) {
         this.row = this.y = row;
         this.column = this.x = column;
@@ -59,15 +41,18 @@ public class Mouse {
 
     // Rotate mouse to face toward the given cell
     void rotateTo(MazeNode cell) {
-        if (x == cell.x) {
-            // Vertical deviation
-            if (y + 1 == cell.y) orientation = Orientation.SOUTH;
-            else if (y - 1 == cell.y) orientation = Orientation.NORTH;
-        } else if (y == cell.y) {
-            // Horizontal deviation
-            if (x + 1 == cell.x) orientation = Orientation.EAST;
-            else if (x - 1 == cell.x) orientation = Orientation.WEST;
-        }
+        int dx = cell.x - x;
+        int dy = cell.y - y;
+
+        if (dx == 0 && dy == -1) orientation = Orientation.NORTH;
+        else if (dx == 1 && dy == -1) orientation = Orientation.NORTHEAST;
+        else if (dx == 1 && dy == 0) orientation = Orientation.EAST;
+        else if (dx == 1 && dy == 1) orientation = Orientation.SOUTHEAST;
+        else if (dx == 0 && dy == 1) orientation = Orientation.SOUTH;
+        else if (dx == -1 && dy == 1) orientation = Orientation.SOUTHWEST;
+        else if (dx == -1 && dy == 0) orientation = Orientation.WEST;
+        else if (dx == -1 && dy == -1) orientation = Orientation.NORTHWEST;
+
         rotateTo(orientation);
     }
 
@@ -78,7 +63,18 @@ public class Mouse {
     }
 
     public void moveTo(MazeNode cell) {
-        moveTo(cell.x, cell.y);
+        int dx = cell.column - column;
+        int dy = cell.row - row;
+
+        if (dx != 0 && dy != 0) {
+            // Diagonal move
+            rotateTo(cell);
+        } else {
+            // Non-diagonal move
+            rotateTo(cell);
+        }
+
+        move(dx, dy);
     }
 
     public void moveTo(Point coord) {

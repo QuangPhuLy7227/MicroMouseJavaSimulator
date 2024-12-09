@@ -46,16 +46,35 @@ public class MouseShape {
      */
     public void rotateTo(Orientation orientation) {
         // Calculate dx and dy based on the orientation
-        int dx = (orientation.ordinal() % EVEN == 0) ? 0 : -1 * (orientation.ordinal() - 2);
-        int dy = (orientation.ordinal() % EVEN == 0) ? orientation.ordinal() - 1 : 0;
+//        int dx = (orientation.ordinal() % EVEN == 0) ? 0 : -1 * (orientation.ordinal() - 2);
+//        int dy = (orientation.ordinal() % EVEN == 0) ? orientation.ordinal() - 1 : 0;
+//
+//        // Calculate head position based on orientation
+//        int head_center_x = (int) (body.x + ((1.0 - HEAD_PROPORTION) / 3.0) * body.width);
+//        int head_center_y = (int) (body.y + ((1.0 - HEAD_PROPORTION) / 3.0) * body.height);
+//        int head_x = (orientation.ordinal() % EVEN == 0) ? head_center_x : head_center_x + dx * (head.width / 2);
+//        int head_y = (orientation.ordinal() % EVEN == 0) ? head_center_y + dy * (head.height / 2) : head_center_y;
+//
+//        head.setLocation(head_x, head_y);
 
-        // Calculate head position based on orientation
-        int head_center_x = (int) (body.x + ((1.0 - HEAD_PROPORTION) / 3.0) * body.width);
-        int head_center_y = (int) (body.y + ((1.0 - HEAD_PROPORTION) / 3.0) * body.height);
-        int head_x = (orientation.ordinal() % EVEN == 0) ? head_center_x : head_center_x + dx * (head.width / 2);
-        int head_y = (orientation.ordinal() % EVEN == 0) ? head_center_y + dy * (head.height / 2) : head_center_y;
+        int dx = 0, dy = 0;
 
-        head.setLocation(head_x, head_y);
+        switch (orientation) {
+            case NORTH -> dy = -1;
+            case EAST -> dx = 1;
+            case SOUTH -> dy = 1;
+            case WEST -> dx = -1;
+            case NORTHEAST -> { dx = 1; dy = -1; }
+            case SOUTHEAST -> { dx = 1; dy = 1; }
+            case SOUTHWEST -> { dx = -1; dy = 1; }
+            case NORTHWEST -> { dx = -1; dy = -1; }
+        }
+
+        // Calculate the new head position
+        int headX = body.x + (int) (dx * body.width * HEAD_PROPORTION / 2);
+        int headY = body.y + (int) (dy * body.height * HEAD_PROPORTION / 2);
+
+        head.setLocation(headX, headY);
     }
 
     /**

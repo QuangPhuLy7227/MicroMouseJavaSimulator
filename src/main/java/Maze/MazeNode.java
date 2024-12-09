@@ -22,6 +22,11 @@ public class MazeNode {
     public MazeNode left = null;
     public MazeNode right = null;
 
+    public MazeNode upLeft = null;
+    public MazeNode upRight = null;
+    public MazeNode downLeft = null;
+    public MazeNode downRight = null;
+
     /* begin - graph search data */
     public boolean visited = false;
     public MazeNode prev = null;
@@ -50,6 +55,22 @@ public class MazeNode {
         }
     }
 
+    public void addDiagonalNeighbor(MazeNode vertex) {
+        if (vertex == null) return;
+
+        if (x - 1 == vertex.x && y - 1 == vertex.y) {
+            upLeft = vertex;
+        } else if (x + 1 == vertex.x && y - 1 == vertex.y) {
+            upRight = vertex;
+        } else if (x - 1 == vertex.x && y + 1 == vertex.y) {
+            downLeft = vertex;
+        } else if (x + 1 == vertex.x && y + 1 == vertex.y) {
+            downRight = vertex;
+        } else {
+            System.err.println("Invalid diagonal neighbor addition for " + this + " -> " + vertex);
+        }
+    }
+
     public void removeNeighbor(MazeNode vertex) {
         if (vertex == null) return;
         //Vertical neighbor
@@ -65,6 +86,22 @@ public class MazeNode {
         else {
             /* vertex is not adjacent */
             System.err.println( REMOVE_EDGE_ERROR + this + "<->" + vertex );
+        }
+    }
+
+    public void removeDiagonalNeighbor(MazeNode vertex) {
+        if (vertex == null) return;
+
+        if (vertex == upLeft) {
+            upLeft = null;
+        } else if (vertex == upRight) {
+            upRight = null;
+        } else if (vertex == downLeft) {
+            downLeft = null;
+        } else if (vertex == downRight) {
+            downRight = null;
+        } else {
+            System.err.println("Attempt to remove non-diagonal neighbor from " + this + " -> " + vertex);
         }
     }
 
@@ -120,6 +157,15 @@ public class MazeNode {
         if( left != null ) neighbor_list.push( left );
         if( right != null ) neighbor_list.push( right );
         return neighbor_list;
+    }
+
+    public LinkedList<MazeNode> getDiagonalNeighborList() {
+        LinkedList<MazeNode> diagonals = new LinkedList<>();
+        if (upLeft != null) diagonals.add(upLeft);
+        if (upRight != null) diagonals.add(upRight);
+        if (downLeft != null) diagonals.add(downLeft);
+        if (downRight != null) diagonals.add(downRight);
+        return diagonals;
     }
 
     public double getDiagonalX() {

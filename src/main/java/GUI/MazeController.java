@@ -2,6 +2,7 @@ package GUI;
 
 import Maze.Maze;
 import Mouse.FloodFillSolver;
+import Mouse.FloodFillEventListener;
 import Maze.MazeSerializer;
 import Mouse.Mouse;
 import Maze.MazeNode;
@@ -19,27 +20,20 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import javax.swing.Timer;
 
-public class MazeController implements ActionListener, KeyListener, PopupMenuListener {
+public class MazeController implements ActionListener, KeyListener, PopupMenuListener, FloodFillEventListener {
     private final MazeGUI gui;
     MazeSerializer mazeSerializer;
     public static final int ANIMATION_DELAY = 250;
 
     private int saveCount = 0;
     private static final int MAX_SAVES = 3;
-    private final File[] savedMazeFiles = {
-            new File("saveMazeFiles1.dat"),
-            new File("saveMazeFiles2.dat"),
-            new File("saveMazeFiles3.dat")
-    };
-
-    public File[] getSavedMazeFiles() {
-        return savedMazeFiles;
-    }
 
     public MazeController(MazeGUI gui) {
         this.gui = gui;
         mazeSerializer = gui.getRefMaze().mazeSerializer;
+        gui.getMouse().getMouseSolver().setEventListener(this);
     }
 
     @Override
@@ -72,6 +66,9 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
     }
 
     private void handleNewMazeButtonEvent() {
+        gui.getAnimationCLK().stop();
+        gui.resetMouseRunTimer();
+
         // Regenerate the maze
         gui.setRefMaze(new Maze(gui.getRefMaze().getDimension()));
         gui.setMouseMaze(new Maze(gui.getRefMaze().getDimension()));
@@ -80,7 +77,10 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
         gui.setEndNode(gui.getRefMaze().getEnd());
         System.out.println("New End Node: " + gui.getEndNode());
 
-        gui.setMouse(new Mouse(gui.getRefMaze().getDimension() - 1, 0, gui.getRefMaze(), gui.getMouseMaze()));
+//        gui.setMouse(new Mouse(gui.getRefMaze().getDimension() - 1, 0, gui.getRefMaze(), gui.getMouseMaze()));
+        Mouse newMouse = new Mouse(gui.getRefMaze().getDimension() - 1, 0, gui.getRefMaze(), gui.getMouseMaze());
+        newMouse.getMouseSolver().setEventListener(this); // Register listener on the new solver
+        gui.setMouse(newMouse);
 
         // Trigger any additional updates like redrawing the maze or resetting the UI if needed
         gui.getRenderPanel().repaint();
@@ -204,11 +204,13 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
         if (gui.getAnimationCLK().isRunning() == false) {
             /* start animation */
             gui.getAnimationCLK().start();
+            gui.startMouseRunTimer();
             gui.getAnimateButton().setText("Stop");
             gui.getNextButton().setEnabled(false);
         } else {
             /* stop animation */
             gui.getAnimationCLK().stop();
+            gui.stopMouseRunTimer();
             gui.getAnimateButton().setText("Animate");
             gui.getNextButton().setEnabled(true);
         }
@@ -236,6 +238,7 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
             /* mouse is done running. */
             System.err.println("Mouse is done running.");
             if (gui.getAnimationCLK().isRunning()) gui.getAnimationCLK().stop();
+            gui.stopMouseRunTimer();
             gui.getAnimateButton().setText("Animate");
             gui.getAnimateButton().setEnabled(true);
             gui.getNextButton().setEnabled(true);
@@ -265,12 +268,19 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
     public void popupMenuWillBecomeInvisible(PopupMenuEvent evt) {}
     @Override
     public void popupMenuCanceled(PopupMenuEvent evt) {}
+
+    @Override
+    public void onRunStart() {
+        gui.startMouseRunTimer(); // Start the timer
+    }
+
+    @Override
+    public void onRunStop() {
+        gui.stopMouseRunTimer(); // Stop the timer
+    }
+
+    @Override
+    public void onRunReset() {
+        gui.resetMouseRunTimer(); // Reset the timer
+    }
 }
-
-
-
-
-
-
-
-

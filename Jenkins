@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Build Version')
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building version ${parameters.VERSION}'
+                sh './gradlew build'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing version ${parameters.VERSION}'
+                sh 'export JAVA_OPTS="-Djava.awt.headless=true" && ./gradlew test'
+            }
+        }
+    }
+
+    post {
+        always {
+            publishHTML(target: [
+                reportDir: 'build/reports/tests/test',
+                reportFiles: 'index.html',
+                reportName: 'Test Report'
+            ])
+        }
+    }
+}

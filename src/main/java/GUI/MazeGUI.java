@@ -19,6 +19,9 @@ public class MazeGUI extends Component {
     private Mouse mouse;
 
     private Timer animationCLK;
+    private Timer mouseRunTimer;
+    private int elapsedTime;
+    private JLabel timerLabel;
     private JPanel northPanel;
     private JPanel southPanel;
     private RenderPanel renderPanel;
@@ -43,11 +46,6 @@ public class MazeGUI extends Component {
     private boolean outputStats = true;
     private final MazeController controller;
     private MazeNode endNode;
-
-    // Timer variables
-    private JLabel timerLabel;
-//    private Timer timer;
-    private int elapsedTime;  // in seconds
 
     /**
      * Constructor: Creates and sets up MazeGUI
@@ -76,7 +74,19 @@ public class MazeGUI extends Component {
         runAStar = astar;
 
         controller = new MazeController(this);
+        elapsedTime = 0;
+        setupTimers();
         begin();
+    }
+
+    private void setupTimers() {
+        // Mouse run timer updates elapsed time every second
+        mouseRunTimer = new Timer(1000, e -> {
+            elapsedTime++;
+            timerLabel.setText("Time: " + elapsedTime + " sec");
+        });
+        // Animation timer for other GUI animations
+        animationCLK = new Timer(MazeController.ANIMATION_DELAY, controller);
     }
 
     private void begin() {
@@ -114,8 +124,7 @@ public class MazeGUI extends Component {
         algoComboBox.addActionListener(controller);
 
         // Timer initialization (initially just "Time:")
-        elapsedTime = 0;
-        timerLabel = new JLabel("Time:");  // Initially just "Time:"
+        timerLabel = new JLabel("Time: 0 sec");  // Initially just "Time:"
         timerLabel.setForeground(Color.BLACK);  // Set text color to black
 
         renderPanel.add(timerLabel);
@@ -229,10 +238,6 @@ public class MazeGUI extends Component {
         return mouse;
     }
 
-    public Timer getAnimationCLK() {
-        return animationCLK;
-    }
-
     public JButton getAnimateButton() {
         return animateButton;
     }
@@ -329,18 +334,28 @@ public class MazeGUI extends Component {
         this.mouse = mouse;
     }
 
-    public String getElapsedTime() {
-        return "Time: " + elapsedTime + " s";
+    public void startMouseRunTimer() {
+        elapsedTime = 0;
+        timerLabel.setText("Time: 0 sec");
+        mouseRunTimer.start();
+    }
+
+    public void stopMouseRunTimer() {
+        mouseRunTimer.stop();
+    }
+
+    public void resetMouseRunTimer() {
+        stopMouseRunTimer();
+        elapsedTime = 0;
+        timerLabel.setText("Time: 0 sec");
+    }
+
+    public Timer getAnimationCLK() {
+        return animationCLK;
     }
 
     public void setElapsedTime(int seconds) {
         // This updates the timerLabel with the elapsed time in seconds
         timerLabel.setText("Time: " + seconds + " sec");
     }
-
-
-
-
-
-
 }

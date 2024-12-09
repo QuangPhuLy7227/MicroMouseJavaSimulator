@@ -25,6 +25,7 @@ public class Maze implements Iterable<MazeNode> {
                 maze[row][column] = new MazeNode(row, column);
             }
         }
+        initializeDiagonalNeighbors();
         mazeGenerator = new MazeGenerator(this);
         mazeSerializer = new MazeSerializer(this);
         pathFinder = new PathFinder(this);
@@ -155,6 +156,49 @@ public class Maze implements Iterable<MazeNode> {
         }
 
         return list;
+    }
+
+    public void initializeDiagonalNeighbors() {
+        for (MazeNode node : this) {
+            MazeNode up = node.up;
+            MazeNode down = node.down;
+            MazeNode left = node.left;
+            MazeNode right = node.right;
+
+            if (up != null && left != null && !wallBetween(node, up) && !wallBetween(node, left)) {
+                node.addDiagonalNeighbor(at(node.row - 1, node.column - 1)); // Up-left
+            }
+            if (up != null && right != null && !wallBetween(node, up) && !wallBetween(node, right)) {
+                node.addDiagonalNeighbor(at(node.row - 1, node.column + 1)); // Up-right
+            }
+            if (down != null && left != null && !wallBetween(node, down) && !wallBetween(node, left)) {
+                node.addDiagonalNeighbor(at(node.row + 1, node.column - 1)); // Down-left
+            }
+            if (down != null && right != null && !wallBetween(node, down) && !wallBetween(node, right)) {
+                node.addDiagonalNeighbor(at(node.row + 1, node.column + 1)); // Down-right
+            }
+        }
+    }
+
+    public void updateDiagonalNeighbors(MazeNode node) {
+        node.upLeft = node.upRight = node.downLeft = node.downRight = null;
+        MazeNode up = node.up;
+        MazeNode down = node.down;
+        MazeNode left = node.left;
+        MazeNode right = node.right;
+
+        if (up != null && left != null && !wallBetween(node, up) && !wallBetween(node, left)) {
+            node.addDiagonalNeighbor(at(node.row - 1, node.column - 1)); // Up-left
+        }
+        if (up != null && right != null && !wallBetween(node, up) && !wallBetween(node, right)) {
+            node.addDiagonalNeighbor(at(node.row - 1, node.column + 1)); // Up-right
+        }
+        if (down != null && left != null && !wallBetween(node, down) && !wallBetween(node, left)) {
+            node.addDiagonalNeighbor(at(node.row + 1, node.column - 1)); // Down-left
+        }
+        if (down != null && right != null && !wallBetween(node, down) && !wallBetween(node, right)) {
+            node.addDiagonalNeighbor(at(node.row + 1, node.column + 1)); // Down-right
+        }
     }
 
     @Override

@@ -7,7 +7,11 @@ public enum Orientation {
     NORTH,
     EAST,
     SOUTH,
-    WEST;
+    WEST,
+    NORTHEAST,
+    SOUTHEAST,
+    SOUTHWEST,
+    NORTHWEST;
 
     // Checks if the string equivalent enum exists in orientation.
     public static boolean contains(String value) {
@@ -38,12 +42,46 @@ public enum Orientation {
 
     // Relative back to the current orientation
     public Orientation relativeBack() {
-        int length = size();
-        return values()[(ordinal() + (length / 2)) % length];
+//        int length = size();
+//        return values()[(ordinal() + (length / 2)) % length];
+        switch (this) {
+            case NORTH:
+                return SOUTH;
+            case EAST:
+                return WEST;
+            case SOUTH:
+                return NORTH;
+            case WEST:
+                return EAST;
+            default:
+                return this; // For diagonal, don't rotate.
+        }
     }
 
     //Moves orientation clockwise.
     public Orientation next() {
-        return relativeRight();
+//        return relativeRight();
+        switch (this) {
+            case NORTH:
+                return EAST;
+            case EAST:
+                return SOUTH;
+            case SOUTH:
+                return WEST;
+            case WEST:
+                return NORTH;
+            default:
+                return this; // For diagonal, don't rotate.
+        }
+    }
+
+    // Checks if the orientation is a diagonal direction.
+    public boolean isDiagonal() {
+        return this == NORTHEAST || this == NORTHWEST || this == SOUTHEAST || this == SOUTHWEST;
+    }
+
+    // Checks if the orientation is a cardinal direction.
+    public boolean isCardinal() {
+        return this == NORTH || this == EAST || this == SOUTH || this == WEST;
     }
 }
