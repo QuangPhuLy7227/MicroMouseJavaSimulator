@@ -22,11 +22,21 @@ pipeline {
 
     post {
         always {
-            publishHTML(target: [
-                reportDir: 'build/reports/tests/test',
-                reportFiles: 'index.html',
-                reportName: 'Test Report'
-            ])
+            script {
+                def testReportDir = "build/reports/tests/test"
+                if (fileExists(testReportDir)) {
+                    publishHTML([
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: testReportDir,
+                        reportFiles: 'index.html',
+                        reportName: 'Test Report'
+                    ])
+                } else {
+                    echo "Test report directory does not exist: ${testReportDir}"
+                }
+            }
         }
     }
 }

@@ -13,13 +13,9 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     compileOnly("org.jetbrains:annotations:24.0.0")
-    testImplementation 'junit:junit:4.13.2'
 }
 
-test {
-    useJUnitPlatform()
-}
 
-test{
-    useJUnit()
+tasks.test {
+    useJUnitPlatform() // Use JUnit 5
 }
