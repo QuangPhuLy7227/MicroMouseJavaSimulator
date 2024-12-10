@@ -4,6 +4,7 @@ import Maze.Maze;
 import Mouse.FloodFillSolver;
 import Maze.MazeSerializer;
 import Mouse.Mouse;
+import Maze.MazeNode;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
@@ -14,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Objects;
 
 public class MazeController implements ActionListener, KeyListener, PopupMenuListener {
@@ -232,12 +234,27 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
         } else if (mouseSolver.isDone()) {
             /* mouse is done running. */
             System.err.println("Mouse is done running.");
+
+            // Get the mouse path size
+            LinkedList<MazeNode> mousePath = mouseSolver.getMousePath();
+            int pathSize = mousePath.size();
+
+            int elapsedTime = mouseSolver.getElapsedTime();
+
+            System.out.println("PathSize: " + pathSize);
+            System.out.println("Time: " + elapsedTime);
+
+            gui.updateMousePathSize(pathSize);
+            gui.updateMousePathTime(elapsedTime);
+
+            // Additional logic for stopping animation and enabling buttons
             if (gui.getAnimationCLK().isRunning()) gui.getAnimationCLK().stop();
             gui.getAnimateButton().setText("Animate");
             gui.getAnimateButton().setEnabled(true);
             gui.getNextButton().setEnabled(true);
         }
     }
+
 
     private void toggleAlgoDropDown() {
         gui.getAlgoComboBox().setVisible(!gui.getAlgoComboBox().isVisible());
@@ -260,4 +277,5 @@ public class MazeController implements ActionListener, KeyListener, PopupMenuLis
     public void popupMenuWillBecomeInvisible(PopupMenuEvent evt) {}
     @Override
     public void popupMenuCanceled(PopupMenuEvent evt) {}
+
 }

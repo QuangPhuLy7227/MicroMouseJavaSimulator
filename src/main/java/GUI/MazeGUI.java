@@ -3,12 +3,12 @@ package GUI;
 import Maze.Maze;
 import Maze.MazeNode;
 import Mouse.Mouse;
+import Mouse.FloodFillSolver;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 public class MazeGUI extends Component {
     public static final double MAZE_DEFAULT_PROPORTION = 0.50;
@@ -21,7 +21,9 @@ public class MazeGUI extends Component {
     private Timer animationCLK;
     private Timer mouseRunTimer;
     private int elapsedTime;
+    private Timer timer;
     private JLabel timerLabel;
+    private JLabel nodeTracking;
     private JPanel northPanel;
     private JPanel southPanel;
     private RenderPanel renderPanel;
@@ -46,6 +48,7 @@ public class MazeGUI extends Component {
     private boolean outputStats = true;
     private final MazeController controller;
     private MazeNode endNode;
+    private FloodFillSolver floodFillSolver;
 
     /**
      * Constructor: Creates and sets up MazeGUI
@@ -63,7 +66,7 @@ public class MazeGUI extends Component {
         try {
             if(ref_maze.getMazeSerializer().loadMaze(DATAFILE) == false) {
                 /* load datafile - otherwise create new random maze if that didn't work */
-                ref_maze.getMazeGenerator().createRandomMaze( 3);
+                ref_maze.getMazeGenerator().createRandomMaze(3);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -74,17 +77,22 @@ public class MazeGUI extends Component {
         runAStar = astar;
 
         controller = new MazeController(this);
+        floodFillSolver = new FloodFillSolver(mouse);
         elapsedTime = 0;
         setupTimers();
         begin();
     }
 
     private void setupTimers() {
-        // Mouse run timer updates elapsed time every second
-        mouseRunTimer = new Timer(1000, e -> {
-            elapsedTime++;
-            timerLabel.setText("Time: " + elapsedTime + " sec");
-        });
+        // Mouse run timer updates elapsed time based on FloodFillSolver's elapsed time
+//        mouseRunTimer = new Timer(1000, e -> {
+//            int solverElapsedTime = updateMousePathTime(elapsedTime);
+//            System.out.println("elapsed time: " + solverElapsedTime);
+//            setElapsedTime(solverElapsedTime);
+//
+//            int pathSize = floodFillSolver.getMousePathSize();
+//            setElapsedNode(pathSize);
+//        });
         // Animation timer for other GUI animations
         animationCLK = new Timer(MazeController.ANIMATION_DELAY, controller);
     }
@@ -124,18 +132,22 @@ public class MazeGUI extends Component {
         algoComboBox.addActionListener(controller);
 
         // Timer initialization (initially just "Time:")
-        timerLabel = new JLabel("Time: 0 sec");  // Initially just "Time:"
+        timerLabel = new JLabel("");  // Initially just "Time:"
         timerLabel.setForeground(Color.BLACK);  // Set text color to black
 
         renderPanel.add(timerLabel);
+        nodeTracking = new JLabel("");
 
+
+        renderPanel.add(nodeTracking);
+
+        renderPanel.add(nodeTracking);
 
         /* JComboBox for different saved maze selection */
         String[] loadMazes = { "Select a Maze", "Maze 1", "Maze 2", "Maze 3" };
         loadMazeComboBox = new JComboBox<>(loadMazes);
         loadMazeComboBox.setSelectedIndex(0);
         loadMazeComboBox.setVisible(false);
-//        loadMazeComboBox.addActionListener(e -> handleLoadMazeSelection());
 
         /* Panel to hold the JComboBox for algorithm */
         algoPanel1 = new JPanel();
@@ -193,42 +205,6 @@ public class MazeGUI extends Component {
         main_frame.setVisible(true);
         animationCLK = new Timer(MazeController.ANIMATION_DELAY, controller);
     }
-
-
-//    private void toggleLoadMazeDropDown() {
-//        loadMazeComboBox.setVisible((!loadMazeComboBox.isVisible()));
-//    }
-//
-//    public void handleLoadMazeSelection() {
-//        File[] savedMazeFiles = controller.getSavedMazeFiles();
-//        String selectedMaze = (String) loadMazeComboBox.getSelectedItem();
-//
-//        if ("Select a Maze".equals(selectedMaze)) {
-//            System.out.println("No maze selected");
-//            return;
-//        }
-//
-//        if (selectedMaze != null) {
-//            switch (selectedMaze) {
-//                case "Maze 1":
-//                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[0]);
-//                    System.out.println("Loading Maze 1");
-//                    break;
-//                case "Maze 2":
-//                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[1]);
-//                    System.out.println("Loading Maze 2");
-//                    break;
-//                case "Maze 3":
-//                    ref_maze.getMazeSerializer().loadMaze(savedMazeFiles[2]);
-//                    System.out.println("Loading Maze 3");
-//                    break;
-//                default:
-//                    System.out.println("Invalid selection");
-//            }
-//        }
-//
-//        loadMazeComboBox.setVisible(false);
-//    }
 
     public Maze getRefMaze() {
         return ref_maze;
@@ -358,4 +334,19 @@ public class MazeGUI extends Component {
         // This updates the timerLabel with the elapsed time in seconds
         timerLabel.setText("Time: " + seconds + " sec");
     }
+
+    public void updateMousePathSize(int pathSize) {
+        System.out.println("Updated Path Size in GUI: " + pathSize);
+        nodeTracking.setText("Nodes: " + pathSize);
+    }
+
+    public void updateMousePathTime(int pathTime) {
+        System.out.println("Updated Path Time in GUI: " + pathTime);
+        timerLabel.setText("Time: " + pathTime + " sec");
+    }
+
+    private void setElapsedNode(int nodes) {
+        nodeTracking.setText("Nodes: " + nodes + " nodes");
+    }
+
 }

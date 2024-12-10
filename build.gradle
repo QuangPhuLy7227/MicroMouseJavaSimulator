@@ -15,7 +15,25 @@ dependencies {
     compileOnly("org.jetbrains:annotations:24.0.0")
 }
 
+// Ensure the test source directory is correctly set
+sourceSets {
+    test {
+        java {
+            srcDirs = ['src/Test/java']  // Adjust to your test source directory
+        }
+    }
+}
 
+// Configure the test task to generate reports
 tasks.test {
     useJUnitPlatform() // Use JUnit 5
+    reports {
+        junitXml {
+            destination = file("${buildDir}/reports/tests/test")  // This is where XML reports are stored
+            // Enabled by default, no need for the 'enabled' property
+        }
+        html {
+            destination = file("${buildDir}/reports/tests/html")  // Optional: HTML reports
+        }
+    }
 }
