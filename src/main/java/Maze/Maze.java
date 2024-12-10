@@ -65,27 +65,60 @@ public class Maze implements Iterable<MazeNode> {
         return at(dimension -1, 0);
     }
 
+//
+
     public MazeNode getEnd() {
-        MazeNode end = at(getDimension() / EVEN, getDimension() / EVEN);
-        if (getDimension() % EVEN == 0) {
-            //quad-cell solution set
-            int lowerBound = getDimension() / EVEN -1;
-            for (int delta = 0; delta < EVEN; delta++) {
-                /* find target node with 3 children in quad-cell solution */
-                MazeNode topNode = at(lowerBound, lowerBound + delta);
-                MazeNode lowerNode = at( lowerBound + 1, lowerBound + delta );
-                if (topNode.getNeighborList().size() > EVEN) {
-                    end = topNode;
-                    break;
-                }
-                if( lowerNode.getNeighborList().size() > EVEN ) {
-                    end = lowerNode;
-                    break;
+        if (dimension <= 16) {
+            // Existing logic for small mazes
+            MazeNode end = at(dimension / EVEN, dimension / EVEN);
+            if (dimension % EVEN == 0) {
+                // Quad-cell solution set
+                int lowerBound = dimension / EVEN - 1;
+                for (int delta = 0; delta < EVEN; delta++) {
+                    // Find target node with 3 or more neighbors in quad-cell solution
+                    MazeNode topNode = at(lowerBound, lowerBound + delta);
+                    MazeNode lowerNode = at(lowerBound + 1, lowerBound + delta);
+                    if (topNode.getNeighborList().size() > EVEN) {
+                        end = topNode;
+                        break;
+                    }
+                    if (lowerNode.getNeighborList().size() > EVEN) {
+                        end = lowerNode;
+                        break;
+                    }
                 }
             }
+            System.out.println("End Node (Target Node): " + end.row + ", " + end.column);
+            return end;
+        } else {
+            // Extended logic for large mazes, focused on the bottom-right quadrant
+            int halfDim = dimension / 2;
+            MazeNode end = at(halfDim + halfDim / EVEN, halfDim + halfDim / EVEN);
+
+            if (dimension % EVEN == 0) {
+                // Quad-cell solution set in bottom-right quadrant
+                int lowerBoundRow = halfDim + halfDim / EVEN - 1;
+                int lowerBoundCol = halfDim + halfDim / EVEN - 1;
+
+                for (int delta = 0; delta < EVEN; delta++) {
+                    // Check nodes in the bottom-right quadrant's quad-cell
+                    MazeNode topNode = at(lowerBoundRow, lowerBoundCol + delta);
+                    MazeNode lowerNode = at(lowerBoundRow + 1, lowerBoundCol + delta);
+                    if (topNode.getNeighborList().size() > EVEN) {
+                        end = topNode;
+                        break;
+                    }
+                    if (lowerNode.getNeighborList().size() > EVEN) {
+                        end = lowerNode;
+                        break;
+                    }
+                }
+            }
+            System.out.println("End Node (Target Node): " + end.row + ", " + end.column);
+            return end;
         }
-        return end;
     }
+
 
     //Create an undirected edge connect 2 vertex
     public void addEdge(MazeNode a, MazeNode b) {
