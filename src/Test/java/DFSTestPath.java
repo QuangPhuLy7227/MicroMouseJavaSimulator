@@ -7,8 +7,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DFSTestPath {
@@ -77,19 +76,24 @@ public class DFSTestPath {
      */
     @Test
     public void testNoPath() {
-        start = maze.at(0, 0);
+        start = maze.at(1, 0);
         MazeNode node1 = maze.at(1, 0);
         MazeNode node2 = maze.at(2, 0);
         MazeNode node3 = maze.at(3, 0);
         end = maze.at(4, 0);
 
+        // Set up edges to simulate the path is incomplete
         maze.addEdge(start, node1);
         maze.addEdge(node1, node2);
         maze.addEdge(node2, node3);
 
+        // Call DFS to find a path
         LinkedList<MazeNode> path = dfs.findPath(start, end);
 
+        // Assert that no path was found (path should be empty)
         String message = "No path found from start to end vertex using DFS";
-        assertNull(path, message);
+        assertNotNull(path, message);  // Ensure the result is not null
+        assertTrue(path.isEmpty(), message);  // Ensure the path is empty
     }
+
 }

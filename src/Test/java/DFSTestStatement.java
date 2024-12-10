@@ -67,6 +67,8 @@ public class DFSTestStatement {
 
         LinkedList<MazeNode> result = dfs.findPath(start, end);
 
-        assertNull(result);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
+
 }
