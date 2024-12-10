@@ -67,8 +67,14 @@ public class MazeSerializer {
         int data = 0;
         int bitCount = 0;
         //Write the dimension of the maze out to the stream (width, height)
+//        ByteBuffer buffer = ByteBuffer.allocate(2 * Integer.BYTES);
+//        outStream.write(buffer.array());
+
         ByteBuffer buffer = ByteBuffer.allocate(2 * Integer.BYTES);
+        buffer.putInt(dimension);  // Write width
+        buffer.putInt(dimension);  // Write height
         outStream.write(buffer.array());
+
 
         //Serialize the maze structure
         for (int row = 0; row < dimension; row++) {

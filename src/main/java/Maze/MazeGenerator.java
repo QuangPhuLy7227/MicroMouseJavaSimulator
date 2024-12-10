@@ -491,5 +491,4 @@ public class MazeGenerator {
         // Adjacent if one difference is exactly 1 and the other is 0
         return (dr == 1 && dc == 0) || (dr == 0 && dc == 1);
     }
-
 }

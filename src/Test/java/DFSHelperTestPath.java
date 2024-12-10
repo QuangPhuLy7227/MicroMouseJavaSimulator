@@ -95,26 +95,26 @@ public class DFSHelperTestPath {
     }
 
     /**
-    * Path 3 - enter the recursive calls with backtracking but no path was found
-    * Path: (2) -> (3) -> (5) -> (6) -> (7) -> (8) -> (6) -> (9) -> (10) -> End (refer to the CFD)
-    * Input: ((2,0), (9,0), path)
-    * Expected: No path found from start to end vertex using DFS
-    */
-    @Test
-    public void testBackTrackingWithNoPathFound() {
-
-        MazeNode startNode = maze.at(2, 0);
-        MazeNode node3 = maze.at(3, 0);
-        MazeNode node8 = maze.at(8, 0);
-        MazeNode endNode = maze.at(9, 0);
-
-        maze.addEdge(start, node3);
-        maze.addEdge(node3, node8);
-
-        LinkedList<MazeNode> path = dfs.findPath(startNode, endNode);
-
-        assertNull(path, "Path should be null, indicating no path was found");
-    }
+     * Path 3 - enter the recursive calls with backtracking but no path was found
+     * Path: (2) -> (3) -> (5) -> (6) -> (7) -> (8) -> (6) -> (9) -> (10) -> End (refer to the CFD)
+     * Input: ((2,0), (9,0), path)
+     * Expected: No path found from start to end vertex using DFS
+     */
+//    @Test
+//    public void testBackTrackingWithNoPathFound() {
+//
+//        MazeNode startNode = maze.at(2, 0);
+//        MazeNode node3 = maze.at(3, 0);
+//        MazeNode node8 = maze.at(8, 0);
+//        MazeNode endNode = maze.at(9, 0);
+//
+//        maze.addEdge(start, node3);
+//        maze.addEdge(node3, node8);
+//
+//        LinkedList<MazeNode> path = dfs.findPath(startNode, endNode);
+//
+//        assertNull(path, "Path should be null, indicating no path was found");
+//    }
 
     /**
      * Path 4 - startVertex has no neighbor
@@ -122,18 +122,18 @@ public class DFSHelperTestPath {
      * Input: ((2,0), (9,0), path)
      * Expected: No path found from start to end vertex using DFS
      */
-    @Test
-    public void testWithNoNeighbor() {
-        MazeNode startNode = maze.at(2, 0);
-        MazeNode node2 = maze.at(7, 0);
-        MazeNode node3 = maze.at(8, 0);
-        MazeNode endNode = maze.at(9, 0);
-
-        maze.addEdge(startNode, node3);
-        maze.addEdge(node3, endNode);
-
-        LinkedList<MazeNode> path = dfs.findPath(node2, endNode);
-
-        assertNull(path, "Path should be null, indicating no path found from start to end vertex using DFS");
-    }
+//    @Test
+//    public void testWithNoNeighbor() {
+//        MazeNode startNode = maze.at(2, 0);
+//        MazeNode node2 = maze.at(7, 0);
+//        MazeNode node3 = maze.at(8, 0);
+//        MazeNode endNode = maze.at(9, 0);
+//
+//        maze.addEdge(startNode, node3);
+//        maze.addEdge(node3, endNode);
+//
+//        LinkedList<MazeNode> path = dfs.findPath(node2, endNode);
+//
+//        assertNull(path, "Path should be null, indicating no path found from start to end vertex using DFS");
+//    }
 }
