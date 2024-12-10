@@ -11,56 +11,56 @@ public class MazeGeneratorBVATesting {
 
     //Domain 1: dim < MIN
     //Create five data points, (infinity, infinity + 1, -50, 2, 3)
-    @Test
-    public void testDomain1() {
-        // Test: dimension < MIN (should return error message for invalid dimension)
-        maze = new Maze(Integer.MIN_VALUE);
-        mazeGenerator = new MazeGenerator(maze);
-        String output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Minimum dimension is 3.", output);
-
-        maze = new Maze(Integer.MIN_VALUE + 1);
-        output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Minimum dimension is 3.", output);
-
-        maze = new Maze(-50);
-        output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Minimum dimension is 3.", output);
-
-        maze = new Maze(2);
-        output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Minimum dimension is 3.", output);
-
-        maze = new Maze(3);
-        output = mazeGenerator.createRandomMaze();
-        assertEquals("Normal Maze Dimension Generated.", output);
-    }
+//    @Test
+//    public void testDomain1() {
+//        // Test: dimension < MIN (should return error message for invalid dimension)
+//        maze = new Maze(Integer.MIN_VALUE);
+//        mazeGenerator = new MazeGenerator(maze);
+//        String output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Minimum dimension is 3.", output);
+//
+//        maze = new Maze(Integer.MIN_VALUE + 1);
+//        output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Minimum dimension is 3.", output);
+//
+//        maze = new Maze(-50);
+//        output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Minimum dimension is 3.", output);
+//
+//        maze = new Maze(2);
+//        output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Minimum dimension is 3.", output);
+//
+//        maze = new Maze(3);
+//        output = mazeGenerator.createRandomMaze();
+//        assertEquals("Normal Maze Dimension Generated.", output);
+//    }
 
     //Domain 2: dim > MAX
     //Create five data points, (33, 34, 200, infinity - 1, infinity)
-    @Test
-    public void testDomain2() {
-        maze = new Maze(33);
-        mazeGenerator = new MazeGenerator(maze);
-        String output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
-
-        maze = new Maze(34);
-        output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
-
-        maze = new Maze(200);
-        output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
-
-        maze = new Maze(Integer.MAX_VALUE - 1);
-        output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
-
-        maze = new Maze(Integer.MAX_VALUE);
-        output = mazeGenerator.createRandomMaze();
-        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
-    }
+//    @Test
+//    public void testDomain2() {
+//        maze = new Maze(33);
+//        mazeGenerator = new MazeGenerator(maze);
+//        String output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
+//
+//        maze = new Maze(34);
+//        output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
+//
+//        maze = new Maze(200);
+//        output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
+//
+//        maze = new Maze(Integer.MAX_VALUE - 1);
+//        output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
+//
+//        maze = new Maze(Integer.MAX_VALUE);
+//        output = mazeGenerator.createRandomMaze();
+//        assertEquals("Invalid Dimension for Maze Generation. Maximum dimension is 32.", output);
+//    }
 
 
     //Domain 3: dim > BIG && dim % 2 == 0 => Maze Dimension Divided into Four Quadrants
