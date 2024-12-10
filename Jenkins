@@ -25,6 +25,8 @@ pipeline {
             script {
                 def testReportDir = "build/reports/tests/test"
                 if (fileExists(testReportDir)) {
+                    // Archive and process JUnit XML test results
+                    junit '**/build/reports/tests/test/*.xml' // This will find all XML files in the report directory
                     publishHTML([
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,

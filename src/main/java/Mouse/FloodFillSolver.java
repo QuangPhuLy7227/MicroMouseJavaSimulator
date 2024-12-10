@@ -19,6 +19,7 @@ public class FloodFillSolver {
     private boolean done = false;
     private boolean diagonalAttempt = false;
     private int numOfRuns = 0;
+    private int elapsedTime;
 
     public FloodFillSolver(Mouse mouse) {
         this.mouse = mouse;
@@ -73,6 +74,7 @@ public class FloodFillSolver {
             done = false;
             retreat();
             setPreviousPath(mousePath);
+
             // If we just completed a diagonal attempt, reset the flag
             if (diagonalAttempt) {
                 diagonalAttempt = false;
@@ -86,6 +88,12 @@ public class FloodFillSolver {
         mouse.setVisited(currentCell, true);
         markNeighborWalls(currentCell, mouse.getOrientation());
 
+        // Increment the elapsed time by 1 every time the mouse moves to a new cell
+        elapsedTime++;
+
+        // Debugging: Print elapsed time every time it's incremented
+        System.out.println("Elapsed Time: " + elapsedTime);
+
         calibrateDistance(currentCell);
 
         // If in diagonal attempt mode, use diagonal neighbors
@@ -97,6 +105,7 @@ public class FloodFillSolver {
                 }
             }
         }
+
         // Regular neighbor exploration
         for (MazeNode openNeighbor : currentCell.getNeighborList()) {
             if (openNeighbor.distance == currentCell.distance - 1) {
@@ -106,6 +115,11 @@ public class FloodFillSolver {
         }
         return true;
     }
+
+    public int getElapsedTime() {
+        return elapsedTime;
+    }
+
 
     private LinkedList<MazeNode> calculateDiagonalPath() {
         LinkedList<MazeNode> diagonalPath = new LinkedList<>();
@@ -265,16 +279,6 @@ public class FloodFillSolver {
         MazeNode[] refNeighbors = { refCell.up, refCell.right, refCell.down, refCell.left };
         MazeNode[] neighbors = { cell.up, cell.right, cell.down, cell.left };
 
-//        Orientation point = orientation.relativeLeft();
-//        while (point != orientation.relativeBack()) {
-//            /* sweep across the left wall, up wall, and right wall */
-//            if (refNeighbors[point.ordinal()] == null) {
-//                /* wall found in reference maze */
-//                mouse.getMaze().removeEdge(cell, neighbors[point.ordinal()]);
-//            }
-//            point = point.next();
-//        }
-
         for (int i = 0; i < refNeighbors.length; i++) {
             if (refNeighbors[i] == null) {
                 // Wall found in reference maze
@@ -342,6 +346,11 @@ public class FloodFillSolver {
     public LinkedList<MazeNode> getMousePath() {
         return new LinkedList<MazeNode>( mousePath );
     }
+
+    public int getMousePathSize() {
+        return mousePath.size();
+    }
+
 
     /**
      * Statistic that gets the total number of cells the mouse visited on the maze.

@@ -20,7 +20,7 @@ public class MazeGenerator {
 
     public void createRandomMaze(int nonTreeEdges) {
         maze.setNonTreeEdges(nonTreeEdges);
-        createRandomMaze();
+        String output = createRandomMaze();
     }
 
     public void createRandomMaze(File datafile) throws IOException {
@@ -33,7 +33,7 @@ public class MazeGenerator {
         maze.getMazeSerializer().saveMaze(datafile);
     }
 
-    public void createRandomMaze() {
+    public String createRandomMaze() {
         final int MIN_DIM = 3;
         final int BIG_DIM = 16;
         final int MAX_DIM = 32;
@@ -43,17 +43,18 @@ public class MazeGenerator {
 
         if (dimension < MIN_DIM) {
             System.err.println("Invalid Dimension for Maze Generation. Minimum dimension is 3.");
-            return;
+            return "Invalid Dimension for Maze Generation. Minimum dimension is 3.";
         }
 
         if (dimension > MAX_DIM) {
             System.err.println("Invalid Dimension for Maze Generation. Maximum dimension is 32.");
-            return;
+            return "Invalid Dimension for Maze Generation. Maximum dimension is 32.";
         }
 
         if (dimension <= BIG_DIM) {
             // Normal maze generation for dimensions <= 16
             generateMaze(rand, 0, 0, dimension);
+            return "Normal Maze Dimension Generated.";
         } else {
             if (dimension % 2 == 0) {
                 // For dimensions > 16, divide into quadrants
@@ -67,8 +68,10 @@ public class MazeGenerator {
 
                 // Connect quadrants
                 connectQuadrants(rand, halfDim);
+                return "Maze Dimension Divided into Four Quadrants";
             } else {
                 generateMaze(rand, 0, 0, dimension);
+                return "Maze Dimension Cannot be Divided into Four Quadrants";
             }
         }
     }
